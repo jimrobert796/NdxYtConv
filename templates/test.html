@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pruebas API GET</title>
+</head>
+<body>
+    <h1>Pruebas API ndxYtConverter (GET)</h1>
+    
+    <!-- Test 1: GET /request -->
+    <div>
+        <h2>1. Validar URL de YouTube</h2>
+        <input type="text" id="urlInput" placeholder="URL de YouTube" style="width: 400px;" value="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+        <button onclick="testRequest()">Probar</button>
+        <pre id="result1"></pre>
+    </div>
+    
+    <hr>
+    
+    <!-- Test 2: GET /conversion/mp3 -->
+    <div>
+        <h2>2. Convertir a MP3 (GET)</h2>
+        <input type="text" id="mp3Url" placeholder="URL para MP3" style="width: 400px;" value="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+        <button onclick="testMP3()">Convertir a MP3</button>
+        <div id="statusMP3"></div>
+    </div>
+    
+    <hr>
+    
+    <!-- Test 3: GET /conversion/mp4 -->
+    <div>
+        <h2>3. Convertir a MP4 (GET)</h2>
+        <input type="text" id="mp4Url" placeholder="URL para MP4" style="width: 400px;" value="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><br><br>
+        Calidad:
+        <select id="calidadSelect">
+            <option value="1">144p</option>
+            <option value="2">360p</option>
+            <option value="3" selected>720p</option>
+            <option value="4">1080p</option>
+            <option value="5">Máxima</option>
+        </select>
+        <button onclick="testMP4()">Convertir a MP4</button>
+        <div id="statusMP4"></div>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+<script>$(document).ready(function() {
+    // Cargar URLs de ejemplo al iniciar
+    $('#urlInput').val('https://youtu.be/M910sjgb3gk');
+    $('#mp3Url').val('https://youtu.be/M910sjgb3gk');
+    $('#mp4Url').val('https://youtu.be/M910sjgb3gk');
+    
+    // 1. Test GET /request
+    window.testRequest = function() {
+        const url = $('#urlInput').val();
+        const encodedUrl = encodeURIComponent(url);
+        const apiUrl = `http://127.0.0.1:8000/request?urlVideo=${encodedUrl}`;
+        
+        $('#result1').text('Probando...');
+        
+        $.ajax({
+            url: apiUrl,
+            method: 'GET',
+            success: function(data) {
+                $('#result1').text(JSON.stringify(data, null, 2));
+            },
+            error: function(error) {
+                $('#result1').text('Error: ' + error.statusText);
+            }
+        });
+    }
+    
+    // 2. Test GET /conversion/mp3
+    window.testMP3 = function() {
+        const url = $('#mp3Url').val();
+        const statusDiv = $('#statusMP3');
+        
+        statusDiv.html('Iniciando descarga MP3...');
+        
+        const encodedUrl = encodeURIComponent(url);
+        const downloadUrl = `http://127.0.0.1:8000/conversion/mp3?url=${encodedUrl}`;
+        
+        console.log('Descargando desde:', downloadUrl);
+        
+        // Crear enlace temporal con jQuery
+        const $a = $('<a>', {
+            href: downloadUrl,
+            style: 'display: none;'
+        }).appendTo('body');
+        
+        $a[0].click();
+        
+        setTimeout(function() {
+            $a.remove();
+        }, 1000);
+        
+        statusDiv.html('✅ Descarga iniciada en nueva pestaña');
+    }
+    
+    // 3. Test GET /conversion/mp4
+    window.testMP4 = function() {
+        const url = $('#mp4Url').val();
+        const calidad = $('#calidadSelect').val();
+        const statusDiv = $('#statusMP4');
+        
+        console.log('=== DEBUG MP4 ===');
+        console.log('URL original:', url);
+        console.log('Calidad seleccionada (número):', calidad);
+        console.log('Tipo de calidad:', typeof calidad);
+        
+        statusDiv.html('Iniciando descarga MP4...');
+        
+        // Verificar que calidad es un número
+        if (isNaN(calidad) || calidad < 1 || calidad > 5) {
+            statusDiv.html('❌ Error: Calidad debe ser un número del 1 al 5');
+            return;
+        }
+        
+        const encodedUrl = encodeURIComponent(url);
+        const downloadUrl = `http://127.0.0.1:8000/conversion/mp4?url=${encodedUrl}&calidad=${parseInt(calidad)}`;
+        
+        console.log('URL codificada:', encodedUrl);
+        console.log('URL completa de descarga:', downloadUrl);
+        
+        // Crear enlace temporal con jQuery
+        const $a = $('<a>', {
+            href: downloadUrl,
+            style: 'display: none;'
+        }).appendTo('body');
+        
+        console.log('Haciendo click en el enlace...');
+        $a[0].click();
+        
+        // Remover después de un tiempo
+        setTimeout(function() {
+            $a.remove();
+            console.log('Enlace removido');
+        }, 1000);
+        
+        statusDiv.html('✅ Descarga MP4 iniciada (calidad: ' + getNombreCalidad(calidad) + ')');
+    }
+    
+    // Función para obtener nombre de calidad
+    function getNombreCalidad(numero) {
+        const nombres = {
+            1: '144p',
+            2: '360p',
+            3: '720p (HD)',
+            4: '1080p (Full HD)',
+            5: 'Calidad Máxima'
+        };
+        return nombres[numero] || 'Desconocida';
+    }
+    
+    // Exponer función auxiliar si es necesario
+    window.getNombreCalidad = getNombreCalidad;
+});</script>
+</body>
+</html>
