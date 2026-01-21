@@ -8,15 +8,20 @@ import uvicorn
 # Importar el core
 from core.downloader import YouTubeDownloaderCore, VideoInfo
 
+
+
 # Inicializar templates y app
 templates = Jinja2Templates(directory="templates")
 app = FastAPI()
+
 
 # Montar archivos estáticos
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Inicializar el core
 downloader = YouTubeDownloaderCore()
+
+
 
 # Función para limpieza en background
 def borrar_archivo(path: Path):
@@ -41,7 +46,6 @@ def obtener_info_video(urlVideo: str):
     """
     try:
         video_info = downloader.get_video_info(urlVideo)
-        
         return {
             "success": True,
             "thumbnail": video_info.thumbnail_url,

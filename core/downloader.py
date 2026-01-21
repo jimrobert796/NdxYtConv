@@ -44,6 +44,7 @@ class YouTubeDownloaderCore:
                 f"https://i.ytimg.com/vi/{yt.video_id}/hqdefault.jpg",
             ]
             
+            
             thumbnail_url = yt.thumbnail_url
             for thumb_url in thumbnail_candidates:
                 try:
@@ -60,7 +61,6 @@ class YouTubeDownloaderCore:
                 length_formatted = f"{duration//60}:{duration%60:02d}"
             else:
                 length_formatted = f"{duration//3600}:{(duration%3600)//60:02d}:{duration%60:02d}"
-            
             return VideoInfo(
                 title=yt.title,
                 author=yt.author,
@@ -136,7 +136,6 @@ class YouTubeDownloaderCore:
             
             # Limpiar temporal
             temp_audio.unlink(missing_ok=True)
-            
             return output_path
             
         except Exception as e:
@@ -159,6 +158,7 @@ class YouTubeDownloaderCore:
             }
             
             resolution = quality_map.get(quality, "720p")
+            
             
             # Descargar audio
             audio_stream = yt.streams.get_by_itag(140) or yt.streams.get_audio_only()
@@ -211,11 +211,9 @@ class YouTubeDownloaderCore:
             
             # Mover archivo
             shutil.move(str(temp_combined), str(output_path))
-            
             # Limpiar temporal
             temp_audio.unlink(missing_ok=True)
             temp_video.unlink(missing_ok=True)
-            
             return output_path
             
         except Exception as e:
