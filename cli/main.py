@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # cli/main.py - VERSIÓN TERMINAL CON GUARDAR COMO
-from core.downloader import YouTubeDownloaderCore, VideoInfo
+
 import sys
 import argparse
 import subprocess
@@ -14,6 +14,7 @@ import os
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 
+from core.downloader import YouTubeDownloaderCore, VideoInfo
 class SaveDialog:
     """Maneja los diálogos de guardar archivo según el sistema operativo"""
 
@@ -104,8 +105,8 @@ class SaveDialog:
         try:
             result = subprocess.run(
                 ['zenity', '--file-selection', '--save',
-                 '--title', f'Guardar {filename}',
-                 '--filename', filename],
+                '--title', f'Guardar {filename}',
+                '--filename', filename],
                 capture_output=True,
                 text=True,
                 timeout=30
@@ -179,21 +180,23 @@ class YouTubeDownloaderCLI:
     def run(self):
         """Ejecuta la aplicación CLI"""
         parser = argparse.ArgumentParser(
-            description="🎬 NdxYtConverter - bash-ver 1.1",
+            description="🎬 NdxYtConverter - bash-ver 1.2",
             formatter_class=argparse.RawDescriptionHelpFormatter,
             epilog="""
 📋 EJEMPLOS DE USO:
   NdxYt mp3 https://youtu.be/dQw4w9WgXcQ
-  NdxYt mp4 https://youtu.be/dQw4w9WgXcQ --calidad 4
+  NdxYt mp4 https://youtu.be/dQw4w9WgXcQ --calidad 5
   NdxYt info https://youtu.be/dQw4w9WgXcQ
   NdxYt streams https://youtu.be/dQw4w9WgXcQ
 
 🎛️  CALIDADES MP4:
-  1 = 144p      (calidad baja)
-  2 = 360p      (estándar)
-  3 = 720p      (HD - recomendado)
-  4 = 1080p     (Full HD)
-  5 = máxima    (mejor calidad disponible)
+  1 = 144p      (baja calidad)
+  2 = 240p      (media-baja)
+  3 = 360p      (estándar)
+  4 = 480p      (DVD calidad)
+  5 = 720p      (HD - recomendado)
+  6 = 1080p     (Full HD)
+  7 = máxima    (mejor calidad disponible)
 
 💡 CONSEJOS:
   • Usa --no-dialog para descargar directamente sin diálogo
@@ -215,8 +218,8 @@ class YouTubeDownloaderCLI:
         # MP4
         mp4_parser = subparsers.add_parser("mp4", help="🎬 Descargar como MP4")
         mp4_parser.add_argument("url", help="URL del video de YouTube")
-        mp4_parser.add_argument("--calidad", "-q", type=int, choices=range(1, 6),
-                                default=3, help="Calidad del video (1-5)")
+        mp4_parser.add_argument("--calidad", "-q", type=int, choices=range(1, 8),
+                                default=5, help="Calidad del video (1-7)")
         mp4_parser.add_argument("--no-dialog", action="store_true",
                                 help="Descargar sin abrir diálogo 'Guardar como'")
         mp4_parser.add_argument(
@@ -269,12 +272,12 @@ class YouTubeDownloaderCLI:
     def show_banner(self):
         """Muestra el banner de la aplicación"""
         banner = """
-🎬 NdxYtDownloader - Bash-ver1.1                
+🎬 NdxYtDownloader - Bash-ver1.2                
         """
         print(banner)
 
     def download_mp3(self, url: str, use_dialog: bool = True,
-                     output_path: str = None):
+                    output_path: str = None):
         """Descarga MP3 con diálogo opcional"""
         try:
             print("🎵 OBTENIENDO INFORMACIÓN DEL VIDEO...")
@@ -363,18 +366,21 @@ class YouTubeDownloaderCLI:
             print(f"\n❌ Error durante la descarga: {e}")
             raise
 
-    def download_mp4(self, url: str, quality: int = 3, use_dialog: bool = True,
-                     output_path: str = None):
+    def download_mp4(self, url: str, quality: int = 5, use_dialog: bool = True,
+                    output_path: str = None):
         """Descarga MP4 con diálogo opcional"""
         try:
             # Mapeo de calidades
+            # Mapeo de calidades ACTUALIZADO
             quality_names = {
                 1: ("144p", "Calidad baja"),
-                2: ("360p", "Calidad estándar"),
-                3: ("720p", "HD"),
-                4: ("1080p", "Full HD"),
-                5: ("max", "Máxima calidad")
-            }
+                2: ("240p", "Media-baja"),     # ✅ NUEVO
+                3: ("360p", "Estándar"),
+                4: ("480p", "DVD calidad"),    # ✅ NUEVO
+                5: ("720p", "HD"),
+                6: ("1080p", "Full HD"),
+                7: ("max", "Máxima calidad")
+                }
 
             resolution, desc = quality_names.get(quality, ("720p", "HD"))
 
@@ -501,7 +507,7 @@ class YouTubeDownloaderCLI:
             print("📊 STREAMS DISPONIBLES")
             print(f"{'='*80}")
             print(f"{'ITag':<6} {'Tipo':<20} {'Resolución':<12} {'FPS':<6} "
-                  f"{'Audio':<8} {'Tamaño':<10} {'Progresivo':<12}")
+                    f"{'Audio':<8} {'Tamaño':<10} {'Progresivo':<12}")
             print(f"{'='*80}")
 
             # Filtrar y ordenar streams
@@ -543,8 +549,8 @@ class YouTubeDownloaderCLI:
         progressive = "✅" if stream['is_progressive'] else "❌"
 
         print(f"{stream['itag']:<6} {stream['mime_type']:<20} "
-              f"{stream['resolution'] or '':<12} {stream['fps'] or '':<6} "
-              f"{audio:<8} {size:<10} {progressive:<12}")
+                f"{stream['resolution'] or '':<12} {stream['fps'] or '':<6} "
+                f"{audio:<8} {size:<10} {progressive:<12}")
 
     def play_file(self, file_path: Path):
         """Reproduce un archivo con el reproductor predeterminado"""

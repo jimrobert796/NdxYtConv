@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# cli/interactive_robust.py - VERSIÓN MÁS ROBUSTA
+# - VERSIÓN MÁS ROBUSTA
 import sys
 import os
 import argparse
@@ -18,7 +18,7 @@ class InteractiveCLI:
     def create_custom_parser(self):
         """Crea un parser personalizado que no hace sys.exit() en --help"""
         parser = argparse.ArgumentParser(
-            description="🎬 NdxYtConv - Win-Ver 1.2",
+            description="🎬 NdxYtConv - Win-Ver 1.3",
             add_help=False,  # IMPORTANTE: Desactivar --help automático
             formatter_class=argparse.RawDescriptionHelpFormatter
         )
@@ -38,7 +38,7 @@ class InteractiveCLI:
             "mp4", help="🎬 Descargar como MP4", add_help=False)
         mp4_parser.add_argument("url", help="URL de YouTube")
         mp4_parser.add_argument(
-            "--calidad", "-q", type=int, choices=range(1, 6), default=3)
+            "--calidad", "-q", type=int, choices=range(1, 8), default=5)  # ✅ 1-7, default 5
         mp4_parser.add_argument(
             "--no-dialog", action="store_true", help="Sin diálogo de guardar")
         mp4_parser.add_argument("--output", "-o", help="Ruta de salida")
@@ -78,18 +78,23 @@ class InteractiveCLI:
   mp4 <URL> [opciones]
   
   OPCIONES:
-    -q, --calidad <1-5>  Calidad del video (1=baja, 5=alta)
+    -q, --calidad <1-7>  Calidad del video (1=baja, 7=alta)
     --no-dialog          Descargar sin abrir diálogo 'Guardar como'
     -o, --output         Ruta específica para guardar el archivo
     
   CALIDADES:
-    1 = 144p (baja)     2 = 360p (estándar)     3 = 720p (HD)
-    4 = 1080p (Full HD)     5 = máxima calidad
+    1 = 144p  (baja calidad)
+    2 = 240p  (media-baja)    
+    3 = 360p  (estándar)
+    4 = 480p  (DVD calidad)   
+    5 = 720p  (HD - RECOMENDADO)
+    6 = 1080p (Full HD)
+    7 = máxima calidad
     
   EJEMPLOS:
-    mp4 https://youtu.be/ejemplo
-    mp4 https://youtu.be/ejemplo -q 4
-    mp4 https://youtu.be/ejemplo --no-dialog
+    mp4 https://youtu.be/ejemplo              # Descarga 720p (default)
+    mp4 https://youtu.be/ejemplo -q 4         # Descarga 480p
+    mp4 https://youtu.be/ejemplo --no-dialog  # Descarga sin ventana (Si ya tienes ruta)
                 """)
             elif command == "info":
                 print("""
@@ -171,14 +176,14 @@ class InteractiveCLI:
     def run_interactive(self):
         """Ejecuta modo interactivo"""
         print("""
-🎬 NdxYtConv - Win-Ver 1.2
+🎬 NdxYtConv - Win-Ver 1.3
 Escribe '--help' para ayuda | Ctrl+C para salir
 """)
 
         while True:
             try:
                 print("─" * 50)
-                cmd = input("ndxyt> ").strip()
+                cmd = input("NdxYtConv> ").strip()
 
                 if not cmd:
                     continue
@@ -201,7 +206,7 @@ Escribe '--help' para ayuda | Ctrl+C para salir
                 if first in ['clear', 'cls']:
                     os.system('cls' if os.name == 'nt' else 'clear')
                     print("""
-🎬 NdxYtConv - Win-Ver 1.2
+🎬 NdxYtConv - Win-Ver 1.3
 Escribe '--help' para ayuda | Ctrl+C para salir
 """)
                     continue

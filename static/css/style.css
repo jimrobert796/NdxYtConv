@@ -74,7 +74,7 @@ header {
 #calidades {
     display: flex;
     justify-content: center;
-    gap: 45px;
+    gap: 19px;
     margin: 10px;
 }
 
@@ -82,8 +82,8 @@ header {
     background-color: #2B2B2B;
     border: 2.15px solid #7F8381;
     color: #CAD0CE;
-    width: 99.75px;
-    height: 80.57px;
+    width: 88.75px;
+    height: 70.57px;
     font-size: 13.99px;
     margin: 20px 0;
 }
@@ -171,4 +171,11 @@ footer {
     align-items: center;
     justify-content: center;
     gap: 9px;
+}
+
+/* ===== Js Notification Handler ===== */
+.alert{
+    background-color: #1D1D1D;
+    border: 3.76px solid #444;
+    color: #FFFFFF;
 }

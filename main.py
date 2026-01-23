@@ -104,11 +104,13 @@ def convertir_mp4(url: str, calidad: int, background_tasks: BackgroundTasks):
     1. 👆 Haz clic en **"Try it out"**
     2. 📝 **Pega una URL de YouTube:**
     3. 🎯 **Selecciona calidad (1-5):**
-       - **1** = 144p (Calidad baja, archivo pequeño)
-       - **2** = 360p (Calidad estándar)
-       - **3** = 720p (HD - Alta definición)
-       - **4** = 1080p (Full HD - Muy buena calidad)
-       - **5** = Máxima resolución disponible
+       - **1** = 144p (baja calidad)
+       - **2** = 240p (media-baja)
+       - **3** = 360p (Calidad estándar)
+       - **4** = 480pp (DVD estándar)
+       - **4** = 720p (HD - recomendado)
+       - **5** = 1080p (Full HD - Muy buena calidad)
+       - **6** = Máxima resolución disponible
     4. ⚡ Haz clic en **"Execute"**
     5. ⬇️ **El navegador descargará automáticamente** el MP4
     """
