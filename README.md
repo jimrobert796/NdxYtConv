@@ -4,7 +4,7 @@
 
 #         NdxYtConv - Youtube Converter 
 
-![Version](https://img.shields.io/badge/version-1.2-blue)
+![Version](https://img.shields.io/badge/version-1.3-blue)
 ![Python](https://img.shields.io/badge/python-3.8+-green)
 ![Platform](https://img.shields.io/badge/platform-windows%20-orange)
 
