@@ -180,14 +180,14 @@ class YouTubeDownloaderCLI:
     def run(self):
         """Ejecuta la aplicación CLI"""
         parser = argparse.ArgumentParser(
-            description="🎬 NdxYtConverter - bash-ver 1.2",
+            description="🎬 NdxYtConver - bash-ver 1.2",
             formatter_class=argparse.RawDescriptionHelpFormatter,
             epilog="""
 📋 EJEMPLOS DE USO:
-  NdxYt mp3 https://youtu.be/dQw4w9WgXcQ
-  NdxYt mp4 https://youtu.be/dQw4w9WgXcQ --calidad 5
-  NdxYt info https://youtu.be/dQw4w9WgXcQ
-  NdxYt streams https://youtu.be/dQw4w9WgXcQ
+  mp3 https://youtu.be/dQw4w9WgXcQ
+  mp4 https://youtu.be/dQw4w9WgXcQ --calidad 5
+  info https://youtu.be/dQw4w9WgXcQ
+  streams https://youtu.be/dQw4w9WgXcQ
 
 🎛️  CALIDADES MP4:
   1 = 144p      (baja calidad)
@@ -272,7 +272,7 @@ class YouTubeDownloaderCLI:
     def show_banner(self):
         """Muestra el banner de la aplicación"""
         banner = """
-🎬 NdxYtDownloader - Bash-ver1.2                
+🎬 NdxYtConver - Bash-ver1.2                
         """
         print(banner)
 

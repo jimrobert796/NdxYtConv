@@ -18,7 +18,7 @@ class InteractiveCLI:
     def create_custom_parser(self):
         """Crea un parser personalizado que no hace sys.exit() en --help"""
         parser = argparse.ArgumentParser(
-            description="🎬 NdxYtConv - Win-Ver 1.3",
+            description="🎬 NdxYtConv - Win-Ver 1.4",
             add_help=False,  # IMPORTANTE: Desactivar --help automático
             formatter_class=argparse.RawDescriptionHelpFormatter
         )
@@ -176,7 +176,7 @@ class InteractiveCLI:
     def run_interactive(self):
         """Ejecuta modo interactivo"""
         print("""
-🎬 NdxYtConv - Win-Ver 1.3
+🎬 NdxYtConv - Win-Ver 1.4
 Escribe '--help' para ayuda | Ctrl+C para salir
 """)
 
@@ -206,7 +206,7 @@ Escribe '--help' para ayuda | Ctrl+C para salir
                 if first in ['clear', 'cls']:
                     os.system('cls' if os.name == 'nt' else 'clear')
                     print("""
-🎬 NdxYtConv - Win-Ver 1.3
+🎬 NdxYtConv - Win-Ver 1.4
 Escribe '--help' para ayuda | Ctrl+C para salir
 """)
                     continue

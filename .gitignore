@@ -1,5 +1,9 @@
 .env
-
+/cli/__pycache__/
+/core/__pycache__/
 __pycache__/
+/copia_dist
 *.py[code]
 .pytest_cache/
+/dist
+/build

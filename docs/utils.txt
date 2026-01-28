@@ -1,0 +1,8 @@
+# COMANDOS PARA USO 
+
+# Crear archivo de requerimentos y dependencias
+pip freeze > requirements.txt
+
+# Compilacion para windows usando pyInstaller (onefile) o (ondir)
+pyinstaller --onedir --console --name "NdxYtConver" --icon "icon.ico" --paths=. --add-data "core:core" cli/cliWinVer.py
+pyinstaller --onefile --console --name "NdxYtConver" --icon "icon.ico" --paths=. --add-data "core:core" cli/cliWinVer.py
