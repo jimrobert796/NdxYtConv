@@ -1,4 +1,4 @@
-# core/downloader.py - CÓDIGO COMPARTIDO ACTUALIZADO Ver 1.3
+# core/downloader.py - CÓDIGO COMPARTIDO ACTUALIZADO Ver 1.2.1
 from pytubefix import YouTube
 from mutagen.mp3 import MP3
 from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, TYER, TRCK, TCON, TPE2, COMM
