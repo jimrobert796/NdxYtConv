@@ -10,7 +10,7 @@
 
 **Descarga de videos y música de YouTube con metadatos inteligentes**
 
-[Características](#-características) • [Instalación](#-instalación) • [Uso](#-uso)• [Estructura](#-estructura-del-proyecto) • [Desarollo](#-desarollo) 
+[Características](#-características) • [Instalación](#-instalación) • [Uso](#-uso)• [Estructura](#️-estructura-del-proyecto) • [Licencia](#-licencia) 
 
 </div>
 
