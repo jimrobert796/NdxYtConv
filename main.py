@@ -152,7 +152,10 @@ def debug_streams(url: str):
                 f"type={stream['mime_type']} | "
                 f"res={stream['resolution']} | "
                 f"abr={stream['abr']} | "
-                f"audio={stream['has_audio']}"
+                f"fps={stream['fps']} | "
+                f"progressive={stream['is_progressive']} | "
+                f"size={stream['filesize']} | "
+                f"audio={stream['has_audio']} | "
             )
         print("\n===== FIN =====\n")
         

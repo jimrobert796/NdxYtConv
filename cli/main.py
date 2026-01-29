@@ -180,7 +180,7 @@ class YouTubeDownloaderCLI:
     def run(self):
         """Ejecuta la aplicación CLI"""
         parser = argparse.ArgumentParser(
-            description="🎬 NdxYtConver - bash-ver 1.2",
+            description="🎬 NdxYtConver - bash-ver 1.2.1",
             formatter_class=argparse.RawDescriptionHelpFormatter,
             epilog="""
 📋 EJEMPLOS DE USO:
@@ -272,7 +272,7 @@ class YouTubeDownloaderCLI:
     def show_banner(self):
         """Muestra el banner de la aplicación"""
         banner = """
-🎬 NdxYtConver - Bash-ver1.2                
+🎬 NdxYtConver - Bash-ver1.2.1               
         """
         print(banner)
 
@@ -511,10 +511,8 @@ class YouTubeDownloaderCLI:
             print(f"{'='*80}")
 
             # Filtrar y ordenar streams
-            video_streams = [
-                s for s in streams if s['mime_type'].startswith('video')]
-            audio_streams = [
-                s for s in streams if s['mime_type'].startswith('audio')]
+            video_streams = [s for s in streams if s['type'] == 'video']
+            audio_streams = [s for s in streams if s['type'] == 'audio']
 
             # Mostrar streams de video
             print("\n🎬 STREAMS DE VIDEO:")
@@ -541,16 +539,35 @@ class YouTubeDownloaderCLI:
 
         except Exception as e:
             print(f"❌ Error: {e}")
-
+            
+    # Se ha refactorizado la funcion para arreglar errores en pantalla
     def _print_stream_info(self, stream):
-        """Imprime información de un stream"""
-        size = f"{stream['filesize']/(1024*1024):.1f}MB" if stream['filesize'] else "N/A"
-        audio = "✅" if stream['has_audio'] else "❌"
-        progressive = "✅" if stream['is_progressive'] else "❌"
+        """Imprime información completa y segura de un stream"""
 
-        print(f"{stream['itag']:<6} {stream['mime_type']:<20} "
-                f"{stream['resolution'] or '':<12} {stream['fps'] or '':<6} "
-                f"{audio:<8} {size:<10} {progressive:<12}")
+        size = (
+            f"{stream['filesize']:.1f}MB"
+            if stream.get('filesize')
+            else "N/A"
+        )
+
+        fps = stream['fps'] if stream.get('fps') else "-"
+        res = stream['resolution'] if stream.get('resolution') else "-"
+        abr = stream['abr'] if stream.get('abr') else "-"
+        audio = "✅" if stream.get('has_audio') else "❌"
+        progressive = "✅" if stream.get('is_progressive') else "❌"
+
+        print(
+            f"{stream['itag']:<6} "
+            f"{stream['type']:<6} "
+            f"{res:<10} "
+            f"{fps:<4} "
+            f"{abr:<8} "
+            f"{audio:<6} "
+            f"{size:<10} "
+            f"{progressive:<6} "
+            f"{stream['mime_type']}"
+        )
+
 
     def play_file(self, file_path: Path):
         """Reproduce un archivo con el reproductor predeterminado"""

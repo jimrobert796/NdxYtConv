@@ -613,7 +613,8 @@ class YouTubeDownloaderCore:
                     'mime_type': stream.mime_type,
                     'resolution': stream.resolution,
                     'abr': stream.abr,
-                    'fps': stream.fps,
+                     # Se ha arreglado en caso de que la api no devuelva el dato
+                    'fps': stream.fps if stream.type == "video" and hasattr(stream, "fps") else None,
                     'filesize': stream.filesize_mb if hasattr(stream, 'filesize_mb') else None,
                     'has_audio': stream.includes_audio_track,
                     'is_progressive': stream.is_progressive,
@@ -621,7 +622,7 @@ class YouTubeDownloaderCore:
                 }
                 
                 # Para audio, mostrar bitrate claro
-                if stream.only_audio:
+                if stream.type == "audio":  # Se ha arreglado (confusion de metodos)
                     stream_info['type'] = 'audio'
                     if stream.abr:
                         stream_info['quality'] = f"Audio {stream.abr}"
