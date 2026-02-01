@@ -10,7 +10,7 @@
 
 **Descarga de videos y música de YouTube con metadatos inteligentes**
 
-[Características](#-características) • [Instalación](#-instalación)  • [Descargas](#-descargas) • [Uso](#-uso) • [Proyecto](#️-instalacion-del-proyecto) • [Licencia](#-licencia) 
+[Características](#características) • [Instalación](#instalación)  • [Descargas](#descargas) • [Uso](#uso) • [Proyecto](#instalación-del-proyecto) • [Licencia](#licencia) 
 
 </div>
 
@@ -20,7 +20,7 @@
 
 **Una herramienta ligera y rápida para convertir contenido de YouTube a formatos locales como mp3/mp4 con metadatos/album para su organizacion en reproductores.**
 
-#  Características
+# Características
 
 ###  **Descarga Inteligente**
 - **MP3 alta calidad**: VBR ~190-250kbps con metadatos ID3
@@ -55,7 +55,7 @@ Sello: "NexTone Inc."
 - **Manejo de errores robusto** con reintentos automáticos
 
 
-#  Instalación
+# Instalación
 
 ### Instalar FFmpeg REQUERIDO! para su uso!
 
@@ -215,7 +215,7 @@ mp4 <URL> -q 4   # 480p
 ---
 
 
-# Instalación del Proyecto
+# Instalación del proyecto
 
 ```bash
 # 1. Clonar repositorio
@@ -228,7 +228,7 @@ pip install -r requirements.txt
 ````
 
 
-##  Dependencias del Proyecto
+# Dependencias del proyecto
 
 A continuación se describen las dependencias utilizadas en **NdxYtConver** y su propósito dentro del proyecto.
 
