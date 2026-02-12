@@ -1,0 +1,9 @@
+services:
+  api:
+    build: .
+    image: ndxytconv
+    container_name: fastapi_ndxytconv
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app

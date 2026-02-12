@@ -163,7 +163,7 @@ $(document).ready(function() {
     function obtenerInfoVideo(url) {
         return new Promise(function(resolve, reject) {
             const encodedUrl = encodeURIComponent(url);
-            const apiUrl = `http://127.0.0.1:8000/request?urlVideo=${encodedUrl}`;
+            const apiUrl = `/request?urlVideo=${encodedUrl}`;
             
             $.ajax({
                 url: apiUrl,
@@ -219,9 +219,9 @@ $(document).ready(function() {
     let downloadUrl;
 
     if (formato === 'MP3') {
-        downloadUrl = `http://127.0.0.1:8000/conversion/mp3?url=${encodedUrl}`;
+        downloadUrl = `/conversion/mp3?url=${encodedUrl}`;
     } else {
-        downloadUrl = `http://127.0.0.1:8000/conversion/mp4?url=${encodedUrl}&calidad=${calidad}`;
+        downloadUrl = `/conversion/mp4?url=${encodedUrl}&calidad=${calidad}`;
     }
 
     const $btn = $btnDescargarDirecto;
