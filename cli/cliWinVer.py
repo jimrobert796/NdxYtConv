@@ -18,7 +18,7 @@ class InteractiveCLI:
     def create_custom_parser(self):
         """Crea un parser personalizado que no hace sys.exit() en --help"""
         parser = argparse.ArgumentParser(
-            description="🎬 NdxYtConv - Win-Ver 1.4.1",
+            description="NdxYtConv - Win-Ver 1.4.2",
             add_help=False,  # IMPORTANTE: Desactivar --help automático
             formatter_class=argparse.RawDescriptionHelpFormatter
         )
@@ -27,30 +27,30 @@ class InteractiveCLI:
 
         # MP3
         mp3_parser = subparsers.add_parser(
-            "mp3", help="🎵 Descargar como MP3", add_help=False)
+            "mp3", help="Descargar como MP3", add_help=False)
         mp3_parser.add_argument("url", help="URL de YouTube")
         mp3_parser.add_argument(
-            "--no-dialog", action="store_true", help="Sin diálogo de guardar")
+            "--no-dialog","-n", action="store_true", help="Sin diálogo de guardar")
         mp3_parser.add_argument("--output", "-o", help="Ruta de salida")
 
         # MP4
         mp4_parser = subparsers.add_parser(
-            "mp4", help="🎬 Descargar como MP4", add_help=False)
+            "mp4", help="Descargar como MP4", add_help=False)
         mp4_parser.add_argument("url", help="URL de YouTube")
         mp4_parser.add_argument(
-            "--calidad", "-q", type=int, choices=range(1, 8), default=5)  # ✅ 1-7, default 5
+            "--calidad", "-q", type=int, choices=range(1, 8), default=5)  #  1-7, default 5
         mp4_parser.add_argument(
-            "--no-dialog", action="store_true", help="Sin diálogo de guardar")
+            "--no-dialog","-n", action="store_true", help="Sin diálogo de guardar")
         mp4_parser.add_argument("--output", "-o", help="Ruta de salida")
 
         # Info
         info_parser = subparsers.add_parser(
-            "info", help="📺 Mostrar información", add_help=False)
+            "info", help="Mostrar información", add_help=False)
         info_parser.add_argument("url", help="URL de YouTube")
 
         # Streams
         streams_parser = subparsers.add_parser(
-            "streams", help="📊 Mostrar streams", add_help=False)
+            "streams", help=" Mostrar streams", add_help=False)
         streams_parser.add_argument("url", help="URL de YouTube")
 
         return parser
@@ -58,15 +58,15 @@ class InteractiveCLI:
     def show_help(self, command=None):
         """Muestra ayuda personalizada"""
         if command:
-            print(f"\n📖 Ayuda para '{command}':")
+            print(f"\n Ayuda para '{command}':")
 
             if command == "mp3":
                 print("""
   mp3 <URL> [opciones]
   
   OPCIONES:
-    --no-dialog    Descargar sin abrir diálogo 'Guardar como'
-    -o, --output   Ruta específica para guardar el archivo
+    --no-dialog o -n   Descargar sin abrir diálogo 'Guardar como'
+    -o, --output       Ruta específica para guardar el archivo
     
   EJEMPLOS:
     mp3 https://youtu.be/ejemplo
@@ -79,7 +79,7 @@ class InteractiveCLI:
   
   OPCIONES:
     -q, --calidad <1-7>  Calidad del video (1=baja, 7=alta)
-    --no-dialog          Descargar sin abrir diálogo 'Guardar como'
+    --no-dialog o -n     Descargar sin abrir diálogo 'Guardar como'
     -o, --output         Ruta específica para guardar el archivo
     
   CALIDADES:
@@ -117,20 +117,20 @@ class InteractiveCLI:
         else:
             # Ayuda general
             print("""
-🎬 NdxYtConv - Comandos disponibles:
+NdxYtConv -Comandos disponibles:
 
   mp3 <URL>      - Descargar audio como MP3
   mp4 <URL>      - Descargar video como MP4
   info <URL>     - Mostrar información del video
   streams <URL>  - Mostrar streams disponibles
 
-💡 Para ayuda específica:
+ Para ayuda específica:
   help mp3      - Ayuda sobre descarga MP3
   help mp4      - Ayuda sobre descarga MP4
   help info     - Ayuda sobre información
   help streams  - Ayuda sobre streams
 
-🔄 COMANDOS INTERACTIVOS:
+ COMANDOS INTERACTIVOS:
   clear, cls    - Limpiar pantalla
   salir, exit   - Salir del programa
   Ctrl+C       - Salir inmediatamente
@@ -171,13 +171,13 @@ class InteractiveCLI:
             # No hacer nada, solo continuar
             pass
         except Exception as e:
-            print(f"❌ Error: {e}")
+            print(f" Error: {e}")
 
     def run_interactive(self):
         """Ejecuta modo interactivo"""
         print("""
-🎬 NdxYtConv - Win-Ver 1.4.1
-Escribe '--help' para ayuda | Ctrl+C para salir
+NdxYtConv - Win-Ver 1.4.2
+Escribe '--help o -h' para ayuda | Ctrl+C para salir
 """)
 
         while True:
@@ -193,7 +193,7 @@ Escribe '--help' para ayuda | Ctrl+C para salir
 
                 # Comandos especiales
                 if first in ['salir', 'exit', 'quit']:
-                    print("👋 ¡Hasta luego!")
+                    print(" ¡Hasta luego!")
                     break
 
                 if first == 'help':
@@ -206,8 +206,8 @@ Escribe '--help' para ayuda | Ctrl+C para salir
                 if first in ['clear', 'cls']:
                     os.system('cls' if os.name == 'nt' else 'clear')
                     print("""
-🎬 NdxYtConv - Win-Ver 1.4.1
-Escribe '--help' para ayuda | Ctrl+C para salir
+NdxYtConv - Win-Ver 1.4.2
+Escribe '--help o -h' para ayuda | Ctrl+C para salir
 """)
                     continue
 
@@ -226,10 +226,10 @@ Escribe '--help' para ayuda | Ctrl+C para salir
                 self.execute_command(parts)
 
             except KeyboardInterrupt:
-                print("\n\n👋 ¡Hasta luego!")
+                print("\n\n ¡Hasta luego!")
                 break
             except Exception as e:
-                print(f"❌ Error: {e}")
+                print(f" Error: {e}")
 
 
 def main():

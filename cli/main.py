@@ -68,7 +68,7 @@ class SaveDialog:
             return None
 
         except ImportError:
-            print("⚠️  Tkinter no disponible. Usando ubicación por defecto.")
+            print("  Tkinter no disponible. Usando ubicación por defecto.")
             return SaveDialog._fallback_save_path(filename)
 
     @staticmethod
@@ -95,7 +95,7 @@ class SaveDialog:
             return None
 
         except (subprocess.TimeoutExpired, FileNotFoundError):
-            print("⚠️  AppleScript no disponible. Usando ubicación por defecto.")
+            print("  AppleScript no disponible. Usando ubicación por defecto.")
             return SaveDialog._fallback_save_path(filename)
 
     @staticmethod
@@ -134,7 +134,7 @@ class SaveDialog:
             pass
 
         # Si ambos fallan, usar fallback
-        print("⚠️  Zenity/KDialog no disponibles. Usando ubicación por defecto.")
+        print("  Zenity/KDialog no disponibles. Usando ubicación por defecto.")
         return SaveDialog._fallback_save_path(filename)
 
     @staticmethod
@@ -167,7 +167,7 @@ class SaveDialog:
             else:  # Linux
                 subprocess.run(['xdg-open', str(file_path.parent)])
         except Exception as e:
-            print(f"⚠️  No se pudo abrir la carpeta: {e}")
+            print(f"  No se pudo abrir la carpeta: {e}")
 
 
 class YouTubeDownloaderCLI:
@@ -180,16 +180,16 @@ class YouTubeDownloaderCLI:
     def run(self):
         """Ejecuta la aplicación CLI"""
         parser = argparse.ArgumentParser(
-            description="🎬 NdxYtConver - bash-ver 1.2.1",
+            description="NdxYtConver - bash-ver 1.2.1",
             formatter_class=argparse.RawDescriptionHelpFormatter,
             epilog="""
-📋 EJEMPLOS DE USO:
+ EJEMPLOS DE USO:
   mp3 https://youtu.be/dQw4w9WgXcQ
   mp4 https://youtu.be/dQw4w9WgXcQ --calidad 5
   info https://youtu.be/dQw4w9WgXcQ
   streams https://youtu.be/dQw4w9WgXcQ
 
-🎛️  CALIDADES MP4:
+  CALIDADES MP4:
   1 = 144p      (baja calidad)
   2 = 240p      (media-baja)
   3 = 360p      (estándar)
@@ -198,7 +198,7 @@ class YouTubeDownloaderCLI:
   6 = 1080p     (Full HD)
   7 = máxima    (mejor calidad disponible)
 
-💡 CONSEJOS:
+ CONSEJOS:
   • Usa --no-dialog para descargar directamente sin diálogo
   • La aplicación te preguntará al final si quieres abrir la ubicación y reproducir el archivo
             """
@@ -208,7 +208,7 @@ class YouTubeDownloaderCLI:
             dest="command", help="Comando a ejecutar")
 
         # MP3
-        mp3_parser = subparsers.add_parser("mp3", help="🎵 Descargar como MP3")
+        mp3_parser = subparsers.add_parser("mp3", help="Descargar como MP3")
         mp3_parser.add_argument("url", help="URL del video de YouTube")
         mp3_parser.add_argument("--no-dialog", action="store_true",
                                 help="Descargar sin abrir diálogo 'Guardar como'")
@@ -216,7 +216,7 @@ class YouTubeDownloaderCLI:
             "--output", "-o", help="Ruta específica para guardar")
 
         # MP4
-        mp4_parser = subparsers.add_parser("mp4", help="🎬 Descargar como MP4")
+        mp4_parser = subparsers.add_parser("mp4", help="Descargar como MP4")
         mp4_parser.add_argument("url", help="URL del video de YouTube")
         mp4_parser.add_argument("--calidad", "-q", type=int, choices=range(1, 8),
                                 default=5, help="Calidad del video (1-7)")
@@ -227,12 +227,12 @@ class YouTubeDownloaderCLI:
 
         # Info
         info_parser = subparsers.add_parser(
-            "info", help="📺 Mostrar información del video")
+            "info", help=" Mostrar información del video")
         info_parser.add_argument("url", help="URL del video de YouTube")
 
         # Streams
         streams_parser = subparsers.add_parser(
-            "streams", help="📊 Mostrar streams disponibles")
+            "streams", help=" Mostrar streams disponibles")
         streams_parser.add_argument("url", help="URL del video de YouTube")
 
         args = parser.parse_args()
@@ -263,7 +263,7 @@ class YouTubeDownloaderCLI:
                 self.show_streams(args.url)
 
         except KeyboardInterrupt:
-            print("\n\n⏹️  Operación cancelada por el usuario")
+            print("\n\nOperación cancelada por el usuario")
         except Exception as e:
             print(f"\n❌ Error: {e}")
         finally:
@@ -272,7 +272,7 @@ class YouTubeDownloaderCLI:
     def show_banner(self):
         """Muestra el banner de la aplicación"""
         banner = """
-🎬 NdxYtConver - Bash-ver1.2.1               
+ NdxYtConver - Bash-ver1.2.1               
         """
         print(banner)
 
@@ -280,41 +280,41 @@ class YouTubeDownloaderCLI:
                     output_path: str = None):
         """Descarga MP3 con diálogo opcional"""
         try:
-            print("🎵 OBTENIENDO INFORMACIÓN DEL VIDEO...")
+            print(" OBTENIENDO INFORMACIÓN DEL VIDEO...")
             info = self.core.get_video_info(url)
 
-            print(f"\n📺 VIDEO: {info.title}")
-            print(f"👤 CANAL: {info.author}")
-            print(f"⏱️  DURACIÓN: {info.length_formatted}")
+            print(f"\nVIDEO: {info.title}")
+            print(f"CANAL: {info.author}")
+            print(f"DURACIÓN: {info.length_formatted}")
 
             # Determinar ruta de guardado
             if output_path:
                 save_path = Path(output_path)
-                print(f"\n📁 Guardando en ruta especificada: {save_path}")
+                print(f"\nGuardando en ruta especificada: {save_path}")
             elif use_dialog:
-                print(f"\n📂 Abriendo diálogo 'Guardar como'...")
+                print(f"\nAbriendo diálogo 'Guardar como'...")
                 default_name = self.core.sanitize_filename(info.title)
                 save_path = self.save_dialog.get_save_path(
                     default_name, ".mp3")
 
                 if not save_path:
-                    print("❌ El usuario canceló la operación")
+                    print("El usuario canceló la operación")
                     return
 
-                print(f"📍 Ruta seleccionada: {save_path}")
+                print(f"Ruta seleccionada: {save_path}")
             else:
                 # Sin diálogo, usar ubicación por defecto
                 downloads = Path.home() / "Downloads"
                 downloads.mkdir(exist_ok=True)
                 default_name = self.core.sanitize_filename(info.title) + ".mp3"
                 save_path = downloads / default_name
-                print(f"\n📁 Guardando en: {save_path}")
+                print(f"\nGuardando en: {save_path}")
 
             # Verificar si el archivo ya existe
             if save_path.exists():
-                print(f"\n⚠️  El archivo ya existe: {save_path.name}")
+                print(f"\nEl archivo ya existe: {save_path.name}")
                 overwrite = input(
-                    "   ¿Deseas sobrescribirlo? (s/n): ").strip().lower()
+                    "¿Deseas sobrescribirlo? (s/n): ").strip().lower()
                 if overwrite != 's':
                     # Generar nuevo nombre
                     counter = 1
@@ -323,10 +323,10 @@ class YouTubeDownloaderCLI:
                         save_path = save_path.parent / \
                             f"{stem}_{counter}{save_path.suffix}"
                         counter += 1
-                    print(f"📝 Nuevo nombre: {save_path.name}")
+                    print(f"Nuevo nombre: {save_path.name}")
 
             # Descargar
-            print(f"\n⬇️  DESCARGANDO MP3...")
+            print(f"\nDESCARGANDO MP3...")
             print("   Esto puede tomar unos momentos...")
 
             result = self.core.download_mp3(url, save_path)
@@ -335,21 +335,21 @@ class YouTubeDownloaderCLI:
             size_mb = result.stat().st_size / (1024 * 1024)
 
             print(f"\n{'='*60}")
-            print("✅ ¡DESCARGA COMPLETADA!")
+            print("¡DESCARGA COMPLETADA!")
             print(f"{'='*60}")
-            print(f"   📁 Archivo: {result.name}")
-            print(f"   📏 Tamaño: {size_mb:.2f} MB")
-            print(f"   📍 Ubicación: {result.parent}")
+            print(f"Archivo: {result.name}")
+            print(f"Tamaño: {size_mb:.2f} MB")
+            print(f"Ubicación: {result.parent}")
             print(f"{'='*60}")
 
-            print(f"\n🎉 ¡Listo! Archivo guardado exitosamente.")
+            print(f"\n¡Listo! Archivo guardado exitosamente.")
 
             # Preguntar si quiere abrir la ubicación
             print("\n" + "="*40)
             abrir_ubicacion = input(
                 "¿Abrir ubicación del archivo? (s/n): ").strip().lower()
             if abrir_ubicacion == 's':
-                print("\n📂 Abriendo carpeta de destino...")
+                print("\nAbriendo carpeta de destino...")
                 self.save_dialog.open_file_location(result)
 
             # Preguntar si quiere reproducir
@@ -357,13 +357,13 @@ class YouTubeDownloaderCLI:
             reproducir = input(
                 "¿Reproducir archivo ahora? (s/n): ").strip().lower()
             if reproducir == 's':
-                print("\n🎵 Reproduciendo archivo...")
+                print("\nReproduciendo archivo...")
                 self.play_file(result)
 
-            print("\n👋 ¡Proceso finalizado!")
+            print("\n¡Proceso finalizado!")
 
         except Exception as e:
-            print(f"\n❌ Error durante la descarga: {e}")
+            print(f"\nError durante la descarga: {e}")
             raise
 
     def download_mp4(self, url: str, quality: int = 5, use_dialog: bool = True,
@@ -374,9 +374,9 @@ class YouTubeDownloaderCLI:
             # Mapeo de calidades ACTUALIZADO
             quality_names = {
                 1: ("144p", "Calidad baja"),
-                2: ("240p", "Media-baja"),     # ✅ NUEVO
+                2: ("240p", "Media-baja"),     #  NUEVO
                 3: ("360p", "Estándar"),
-                4: ("480p", "DVD calidad"),    # ✅ NUEVO
+                4: ("480p", "DVD calidad"),    #  NUEVO
                 5: ("720p", "HD"),
                 6: ("1080p", "Full HD"),
                 7: ("max", "Máxima calidad")
@@ -384,40 +384,40 @@ class YouTubeDownloaderCLI:
 
             resolution, desc = quality_names.get(quality, ("720p", "HD"))
 
-            print(f"🎬 OBTENIENDO INFORMACIÓN ({resolution} - {desc})...")
+            print(f" OBTENIENDO INFORMACIÓN ({resolution} - {desc})...")
             info = self.core.get_video_info(url)
 
-            print(f"\n📺 VIDEO: {info.title}")
-            print(f"👤 CANAL: {info.author}")
-            print(f"⏱️  DURACIÓN: {info.length_formatted}")
-            print(f"🎯 CALIDAD: {resolution}")
+            print(f"\n VIDEO: {info.title}")
+            print(f" CANAL: {info.author}")
+            print(f" DURACIÓN: {info.length_formatted}")
+            print(f" CALIDAD: {resolution}")
 
             # Determinar ruta de guardado
             if output_path:
                 save_path = Path(output_path)
-                print(f"\n📁 Guardando en ruta especificada: {save_path}")
+                print(f"\n Guardando en ruta especificada: {save_path}")
             elif use_dialog:
-                print(f"\n📂 Abriendo diálogo 'Guardar como'...")
+                print(f"\n Abriendo diálogo 'Guardar como'...")
                 default_name = f"{self.core.sanitize_filename(info.title)}_{resolution}"
                 save_path = self.save_dialog.get_save_path(
                     default_name, ".mp4")
 
                 if not save_path:
-                    print("❌ El usuario canceló la operación")
+                    print("El usuario canceló la operación")
                     return
 
-                print(f"📍 Ruta seleccionada: {save_path}")
+                print(f"Ruta seleccionada: {save_path}")
             else:
                 # Sin diálogo, usar ubicación por defecto
                 downloads = Path.home() / "Downloads"
                 downloads.mkdir(exist_ok=True)
                 default_name = f"{self.core.sanitize_filename(info.title)}_{resolution}.mp4"
                 save_path = downloads / default_name
-                print(f"\n📁 Guardando en: {save_path}")
+                print(f"\n Guardando en: {save_path}")
 
             # Verificar si el archivo ya existe
             if save_path.exists():
-                print(f"\n⚠️  El archivo ya existe: {save_path.name}")
+                print(f"\nEl archivo ya existe: {save_path.name}")
                 overwrite = input(
                     "   ¿Deseas sobrescribirlo? (s/n): ").strip().lower()
                 if overwrite != 's':
@@ -428,10 +428,10 @@ class YouTubeDownloaderCLI:
                         save_path = save_path.parent / \
                             f"{stem}_{counter}{save_path.suffix}"
                         counter += 1
-                    print(f"📝 Nuevo nombre: {save_path.name}")
+                    print(f"Nuevo nombre: {save_path.name}")
 
             # Descargar
-            print(f"\n⬇️  DESCARGANDO MP4...")
+            print(f"\nDESCARGANDO MP4...")
             print("   Esto puede tomar varios minutos dependiendo del tamaño...")
 
             result = self.core.download_mp4(url, quality, save_path)
@@ -440,22 +440,22 @@ class YouTubeDownloaderCLI:
             size_mb = result.stat().st_size / (1024 * 1024)
 
             print(f"\n{'='*60}")
-            print("✅ ¡DESCARGA COMPLETADA!")
+            print("¡DESCARGA COMPLETADA!")
             print(f"{'='*60}")
-            print(f"   📁 Archivo: {result.name}")
-            print(f"   📏 Tamaño: {size_mb:.2f} MB")
-            print(f"   🎬 Resolución: {resolution}")
-            print(f"   📍 Ubicación: {result.parent}")
+            print(f"    Archivo: {result.name}")
+            print(f"    Tamaño: {size_mb:.2f} MB")
+            print(f"    Resolución: {resolution}")
+            print(f"    Ubicación: {result.parent}")
             print(f"{'='*60}")
 
-            print(f"\n🎉 ¡Listo! Video guardado exitosamente.")
+            print(f"\n¡Listo! Video guardado exitosamente.")
 
             # Preguntar si quiere abrir la ubicación
             print("\n" + "="*40)
             abrir_ubicacion = input(
                 "¿Abrir ubicación del archivo? (s/n): ").strip().lower()
             if abrir_ubicacion == 's':
-                print("\n📂 Abriendo carpeta de destino...")
+                print("\n Abriendo carpeta de destino...")
                 self.save_dialog.open_file_location(result)
 
             # Preguntar si quiere reproducir
@@ -463,13 +463,13 @@ class YouTubeDownloaderCLI:
             reproducir = input(
                 "¿Reproducir video ahora? (s/n): ").strip().lower()
             if reproducir == 's':
-                print("\n🎬 Reproduciendo video...")
+                print("\n Reproduciendo video...")
                 self.play_file(result)
 
-            print("\n👋 ¡Proceso finalizado!")
+            print("\n¡Proceso finalizado!")
 
         except Exception as e:
-            print(f"\n❌ Error durante la descarga: {e}")
+            print(f"\nError durante la descarga: {e}")
             raise
 
     def show_info(self, url: str):
@@ -478,15 +478,15 @@ class YouTubeDownloaderCLI:
             info = self.core.get_video_info(url)
 
             print(f"\n{'='*60}")
-            print("📺 INFORMACIÓN COMPLETA DEL VIDEO")
+            print("INFORMACIÓN COMPLETA DEL VIDEO")
             print(f"{'='*60}")
-            print(f"   🎬 TÍTULO: {info.title}")
-            print(f"   👤 CANAL: {info.author}")
-            print(f"   🆔 ID: {info.video_id}")
+            print(f"    TÍTULO: {info.title}")
+            print(f"    CANAL: {info.author}")
+            print(f"    ID: {info.video_id}")
             print(
-                f"   ⏱️  DURACIÓN: {info.length_formatted} ({info.duration} segundos)")
-            print(f"   👁️  VISTAS: {info.views:,}")
-            print(f"   🖼️  THUMBNAIL: {info.thumbnail_url}")
+                f"     DURACIÓN: {info.length_formatted} ({info.duration} segundos)")
+            print(f"     VISTAS: {info.views:,}")
+            print(f"     THUMBNAIL: {info.thumbnail_url}")
             print(f"{'='*60}")
 
             # Opción para abrir thumbnail en navegador
@@ -496,7 +496,7 @@ class YouTubeDownloaderCLI:
                 webbrowser.open(info.thumbnail_url)
 
         except Exception as e:
-            print(f"❌ Error: {e}")
+            print(f" Error: {e}")
 
     def show_streams(self, url: str):
         """Muestra streams disponibles"""
@@ -504,7 +504,7 @@ class YouTubeDownloaderCLI:
             streams = self.core.get_available_streams(url)
 
             print(f"\n{'='*80}")
-            print("📊 STREAMS DISPONIBLES")
+            print(" STREAMS DISPONIBLES")
             print(f"{'='*80}")
             print(f"{'ITag':<6} {'Tipo':<20} {'Resolución':<12} {'FPS':<6} "
                     f"{'Audio':<8} {'Tamaño':<10} {'Progresivo':<12}")
@@ -515,7 +515,7 @@ class YouTubeDownloaderCLI:
             audio_streams = [s for s in streams if s['type'] == 'audio']
 
             # Mostrar streams de video
-            print("\n🎬 STREAMS DE VIDEO:")
+            print("\n STREAMS DE VIDEO:")
             for stream in sorted(video_streams, key=lambda x: (
                 x['resolution'] or '',
                 x['fps'] or 0
@@ -531,14 +531,14 @@ class YouTubeDownloaderCLI:
             print(f"Total: {len(streams)} streams disponibles")
 
             # Recomendaciones
-            print(f"\n💡 RECOMENDACIONES:")
+            print(f"\n RECOMENDACIONES:")
             print("   • Para MP3: Busca streams con 'mime_type' que contenga 'audio'")
             print(
                 "   • Para MP4: Busca video sin audio (progressive=False) + audio separado")
             print("   • Mejor calidad de audio: itag 140 (m4a, 128kbps)")
 
         except Exception as e:
-            print(f"❌ Error: {e}")
+            print(f" Error: {e}")
             
     # Se ha refactorizado la funcion para arreglar errores en pantalla
     def _print_stream_info(self, stream):
@@ -553,8 +553,8 @@ class YouTubeDownloaderCLI:
         fps = stream['fps'] if stream.get('fps') else "-"
         res = stream['resolution'] if stream.get('resolution') else "-"
         abr = stream['abr'] if stream.get('abr') else "-"
-        audio = "✅" if stream.get('has_audio') else "❌"
-        progressive = "✅" if stream.get('is_progressive') else "❌"
+        audio = "Yes" if stream.get('has_audio') else "No"
+        progressive = "Yes" if stream.get('is_progressive') else "No"
 
         print(
             f"{stream['itag']:<6} "
@@ -580,9 +580,9 @@ class YouTubeDownloaderCLI:
                 subprocess.run(['open', str(file_path)])
             else:  # Linux
                 subprocess.run(['xdg-open', str(file_path)])
-            print("   ▶️  Reproduciendo...")
+            print("     Reproduciendo...")
         except Exception as e:
-            print(f"   ⚠️  No se pudo abrir el reproductor: {e}")
+            print(f"     No se pudo abrir el reproductor: {e}")
 
 
 def main():
