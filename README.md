@@ -168,7 +168,7 @@ options:
 
 ```bash
 # Descargar sin diálogo "Guardar como"
-mp3 <URL> --no-dialog
+mp3 <URL> --no-dialog o -n
 
 # Especificar ruta de salida personalizada
 mp4 <URL> -o "C:/Videos/mivideo.mp4"
