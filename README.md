@@ -217,16 +217,39 @@ mp4 <URL> -q 4   # 480p
 
 # Instalación del proyecto
 
+### Docker
 ```bash
 # 1. Clonar repositorio
 git clone https://github.com/jimrobert796/ndxYtConverter.git
 
-# 2. Instalar dependencias
-pip install -r requirements.txt
+# 2. Construir la imagen
+docker build -t nombre-del-proyecto .
 
+# 3. Ejecutar el contenedor
+docker run -p 8000:8000 nombre-del-proyecto
+
+# 4. (Opcional) Ejecutar en background
+docker run -d -p 8000:8000 --name fastapi_ndxytconv ndxytconv
 
 ````
 
+### Docker compose (recomendado)
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/jimrobert796/ndxYtConverter.git
+cd tu-proyecto
+
+# 2. Construir y ejecutar
+docker-compose up -d
+
+# 3. Ver logs
+docker-compose logs -f
+
+# 4. Detener
+docker-compose down
+```
+
+Al momento de crear la imagen, FFmpeg se instala en el contenedor automaticamente.
 
 # Dependencias del proyecto
 
