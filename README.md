@@ -102,24 +102,24 @@ Lanzamiento inicial -WinVer [v1.0.0](https://github.com/tu-usuario/tu-repositori
 ### WinVer - Ejecutable .exe 
 
 ```bash
-🎬 NdxYtConv - Win-Ver 1.4
+NdxYtConv - Win-Ver 1.4
 Escribe '--help' para ayuda | Ctrl+C para salir
 ````
 ```bash
-🎬 NdxYtConv - Comandos disponibles:
+NdxYtConv - Comandos disponibles:
 
   mp3 <URL>      - Descargar audio como MP3
   mp4 <URL>      - Descargar video como MP4
   info <URL>     - Mostrar información del video
   streams <URL>  - Mostrar streams disponibles
 
-💡 Para ayuda específica:
+Para ayuda específica:
   help mp3      - Ayuda sobre descarga MP3
   help mp4      - Ayuda sobre descarga MP4
   help info     - Ayuda sobre información
   help streams  - Ayuda sobre streams
 
-🔄 COMANDOS INTERACTIVOS:
+COMANDOS INTERACTIVOS:
   clear, cls    - Limpiar pantalla
   salir, exit   - Salir del programa
   Ctrl+C       - Salir inmediatamente
@@ -130,26 +130,26 @@ Escribe '--help' para ayuda | Ctrl+C para salir
 EJECUTA -> python .\cli\main.py  
 ````
 ```bash
-🎬 NdxYtConver - bash-ver 1.2
+NdxYtConver - bash-ver 1.2
 
 positional arguments:
   {mp3,mp4,info,streams}
                         Comando a ejecutar
-    mp3                 🎵 Descargar como MP3
-    mp4                 🎬 Descargar como MP4
-    info                📺 Mostrar información del video
-    streams             📊 Mostrar streams disponibles
+    mp3                 Descargar como MP3
+    mp4                 Descargar como MP4
+    info                Mostrar información del video
+    streams             Mostrar streams disponibles
 
 options:
   -h, --help            show this help message and exit
 
-📋 EJEMPLOS DE USO:
+EJEMPLOS DE USO:
   mp3 https://youtu.be/dQw4w9WgXcQ
   mp4 https://youtu.be/dQw4w9WgXcQ --calidad 5
   info https://youtu.be/dQw4w9WgXcQ
   streams https://youtu.be/dQw4w9WgXcQ
 
-🎛️  CALIDADES MP4:
+CALIDADES MP4:
   1 = 144p      (baja calidad)
   2 = 240p      (media-baja)
   3 = 360p      (estándar)
@@ -158,7 +158,7 @@ options:
   6 = 1080p     (Full HD)
   7 = máxima    (mejor calidad disponible)
 
-💡 CONSEJOS:
+CONSEJOS:
   • Usa --no-dialog para descargar directamente sin diálogo
   • La aplicación te preguntará al final si quieres abrir la ubicación y reproducir el archivo
 ````
