@@ -76,8 +76,8 @@ header {
     justify-content: center;
     gap: 19px;
     margin: 10px;
-}
-
+} 
+ 
 .quality-btn {
     background-color: #2B2B2B;
     border: 2.15px solid #7F8381;
@@ -178,4 +178,298 @@ footer {
     background-color: #1D1D1D;
     border: 3.76px solid #444;
     color: #FFFFFF;
+}
+
+
+/* ===== BREAKPOINTS DE BOOTSTRAP 5 ===== */
+
+/* ===== MÓVILES - CONFIGURACIÓN INTELIGENTE ===== */
+
+/* Móviles muy pequeños (<360px) - 2 columnas */
+@media (max-width: 359.98px) {
+    #calidades {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 5px;
+        padding: 0 5px;
+    }
+    
+    .quality-btn {
+        width: 100%;
+        height: 45px;
+        font-size: 10px;
+    }
+    
+    /* El último botón (Calidad Máxima) ocupa 2 columnas */
+    .quality-btn:last-child {
+        grid-column: span 2;
+        width: 60%;
+        justify-self: center;
+    }
+
+    .convert-btn {
+        width: 90%;
+        max-width: 250px;
+    }
+}
+
+/* Móviles pequeños (360px - 479px) - 2 columnas mejoradas */
+@media (min-width: 360px) and (max-width: 479.98px) {
+    #calidades {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        padding: 0 10px;
+    }
+    
+    .quality-btn {
+        width: 100%;
+        height: 50px;
+        font-size: 11px;
+    }
+    
+    .quality-btn:nth-child(5),
+    .quality-btn:nth-child(6) {
+        font-size: 10px; /* Para 720p y 1080p */
+    }
+    
+    .quality-btn:last-child {
+        grid-column: span 2;
+        width: 50%;
+        justify-self: center;
+        font-weight: bold;
+    }
+
+    .convert-btn {
+        width: 280px;
+    }
+}
+
+/* Móviles medianos (480px - 575px) - 3 columnas */
+@media (min-width: 480px) and (max-width: 575.98px) {
+    #calidades {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        padding: 0 15px;
+    }
+    
+    .quality-btn {
+        width: 100%;
+        height: 55px;
+        font-size: 12px;
+    }
+    
+    .quality-btn:nth-child(7) {
+        grid-column: span 3;
+        width: 33.33%;
+        justify-self: center;
+    }
+
+    .convert-btn {
+        width: 350px;
+    }
+    
+}
+
+/* XS - Extra Small (menos de 576px) - MÓVILES */
+@media (max-width: 575.98px) {
+    #calidades {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin: 10px 5px;
+    }
+    
+    .quality-btn {
+        width: calc(50% - 20px); /* 2 botones por fila */
+        max-width: 120px;
+        height: 50px;
+        margin: 3px;
+        font-size: 12px;
+    }
+
+    .convert-btn {
+        width: 340x;
+        margin: 18px;
+    }
+    .instructions,
+.informacion,
+.por-que-uso {
+    font-size: 8.28px;
+    padding-left: 29px;
+    padding-right: 29px;
+}
+.footer-text {
+        padding-left: 29px;
+    padding-right: 29px;
+}
+}
+
+/* SM (≥576px) */
+@media (min-width: 576px) {
+    #calidades {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin: 10px 5px;
+    }
+    
+    .quality-btn {
+        width: calc(50% - 20px); /* 2 botones por fila */
+        max-width: 120px;
+        height: 50px;
+        margin: 3px;
+        font-size: 12px;
+    }
+    .convert-btn {
+    width: 420px;
+    margin: 18px;
+}
+.instructions,
+.informacion,
+.por-que-uso {
+    font-size: 15.28px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+.footer-text {
+        padding-left: 29px;
+    padding-right: 29px;
+}
+
+}
+
+/* MD - Medium (≥768px) */
+@media (min-width: 768px) {
+    #calidades {
+    gap: 7px;
+    } 
+    
+    .quality-btn {
+        width: 60px;
+        height: 55.57px;
+        margin: 5px 0;
+        font-size: 9px;
+    }
+
+    .convert-btn {
+    width: 455px;
+    margin: 18px;
+}
+.instructions,
+.informacion,
+.por-que-uso {
+    font-size: 20.28px;
+}
+.instructions,
+.informacion,
+.por-que-uso {
+    font-size: 15.28px;
+    padding-left: 169px;
+    padding-right: 269px;
+}
+
+.footer-text {
+        padding-left: 29px;
+    padding-right: 29px;
+}
+}
+
+/* LG - Large (≥992px) */
+@media (min-width: 992px) {
+     #calidades {
+    gap: 15px;
+    } 
+    
+    .quality-btn {
+        width: 75px;
+        height: 70.57px;
+        margin: 10px 0;
+        font-size: 11px;
+    }
+
+    .convert-btn {
+    width: 615px;
+    margin: 18px;
+}
+.instructions,
+.informacion,
+.por-que-uso {
+    font-size: 15.28px;
+    padding-left: 169px;
+    padding-right: 269px;
+}
+
+.footer-text {
+        padding-left: 29px;
+    padding-right: 29px;
+}
+
+}
+
+/* XL - Extra Large (≥1200px) */
+@media (min-width: 1200px) {
+    #calidades {
+    gap: 20px;
+    } 
+    
+    .quality-btn {
+        width: 88px;
+        height: 70.57px;
+        margin: 10px 0;
+        font-size: 13px;
+    }
+
+    .convert-btn {
+    width: 740px;
+    margin: 18px;
+}
+.instructions,
+.informacion,
+.por-que-uso {
+    font-size: 15.28px;
+    padding-left: 269px;
+    padding-right: 269px;
+}
+
+.footer-text {
+        padding-left: 29px;
+    padding-right: 29px;
+}
+}
+
+
+
+/* XXL - Extra extra large (≥1400px) */
+@media (min-width: 1400px) {
+    #calidades {
+    gap: 20px;
+    } 
+    
+    .quality-btn {
+        width: 105px;
+        height: 80.57px;
+        margin: 20px 0;
+        font-size: 14px;
+    }
+
+    .convert-btn {
+    width: 855px;
+    margin: 18px;
+}
+.instructions,
+.informacion,
+.por-que-uso {
+    font-size: 15.28px;
+    padding-left: 369px;
+    padding-right: 269px;
+}
+
+.footer-text {
+        padding-left: 29px;
+    padding-right: 29px;
+}
 }
