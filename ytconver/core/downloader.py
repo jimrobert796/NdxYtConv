@@ -749,7 +749,7 @@ class YouTubeDownloaderCore:
         # Instrucciones específicas por sistema
         instructions = {
             'windows': (
-                "📥 Para instalar FFmpeg en Windows:\n"
+                "Para instalar FFmpeg en Windows:\n"
                 "1. Descarga de: https://ffmpeg.org/download.html\n"
                 "2. Busca 'ffmpeg-master-latest-win64-gpl.zip'\n"
                 "3. Descomprime y copia la carpeta 'bin' a:\n"
@@ -758,11 +758,11 @@ class YouTubeDownloaderCore:
                 "   • Presiona Win + X → Sistema → Configuración avanzada\n"
                 "   • Variables de entorno → PATH → Editar → Nuevo\n"
                 "   • Agrega: C:\\ffmpeg\\bin\n\n"
-                "🔄 O instala con -> winget install ffmpeg"
+                "O instala con -> winget install ffmpeg"
             ),
             
             'linux': (
-                "📥 Para instalar FFmpeg en Linux:\n"
+                "Para instalar FFmpeg en Linux:\n"
                 "\n• Ubuntu/Debian: sudo apt update && sudo apt install ffmpeg\n"
                 "• Fedora/RHEL: sudo dnf install ffmpeg\n"
                 "• Arch/Manjaro: sudo pacman -S ffmpeg\n"

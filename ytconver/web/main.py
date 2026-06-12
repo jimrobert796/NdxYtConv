@@ -5,24 +5,37 @@ from fastapi.responses import FileResponse
 from pathlib import Path
 import uvicorn
 
-# Importar el core
-from core.downloader import YouTubeDownloaderCore, VideoInfo
 
+import sys
+import os
+from pathlib import Path
+
+# Rutas absolutas basadas en la ubicación de este archivo
+BASE_DIR = Path(__file__).parent          # ndxYtConv/web/
+ROOT_DIR = Path(__file__).parent.parent   # ndxYtConv/
+
+# Agregar raíz al path para imports
+sys.path.insert(0, str(ROOT_DIR))
+
+
+# Importar el core
+from core.downloader import YouTubeDownloaderCore  # sube un nivel
 
 
 # Inicializar templates y app
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates")) #/ndxYtConv/web/templates
 app = FastAPI()
 
 
 # Montar archivos estáticos
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory=str(BASE_DIR /"static")), name="static") #/ndxYtConv/web/static
 
 # Inicializar el core
 downloader = YouTubeDownloaderCore()
 
-
-
+# Correr la app via terminal o si gustan usarla en otro lugar
+def main():
+    uvicorn.run("web.main:app", port=8000)
 # Función para limpieza en background
 def borrar_archivo(path: Path):
     """Elimina archivo de forma segura"""
@@ -176,4 +189,4 @@ def cleanup_on_shutdown():
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app")
+    main()

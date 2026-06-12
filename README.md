@@ -5,12 +5,12 @@
 #         NdxYtConv - Youtube Converter 
 
 ![Version](https://img.shields.io/badge/version-1.2.1-blue)
-![Python](https://img.shields.io/badge/python-3.8+-green)
+![Python](https://img.shields.io/badge/python-3.12+-green)
 ![Platform](https://img.shields.io/badge/platform-windows%20-orange)
 
 **Descarga de videos y música de YouTube con metadatos inteligentes**
 
-[Características](#características) • [Instalación](#instalación)  • [Descargas](#descargas) • [Uso](#uso) • [Proyecto](#instalación-del-proyecto) • [Licencia](#licencia) 
+[Características](#características) • [Instalación](#instalación)  • [Uso](#uso) • [Proyecto](#instalación-del-proyecto) • [Licencia](#licencia) 
 
 </div>
 
@@ -75,6 +75,15 @@ Si deseas hacer descarga de FFmpeg manual desde su sitio oficial:
 ##  Windows
 
 **Pasos de instalación**
+
+***Instalacion general:***
+1.  **Descarga o clona** el respositorio  
+3. **Ejecuta** `pip install e .`
+3. **Terminal** ya puedes usarlo en terminal `ndxYtConv mp3 <Url_cancion>`
+3. **WebApp** Si deseas usar interfaz grafica escriba en la terminal `ndxYtConv-web`
+
+
+***Ejecutable compilado:***
 1.  **Descarga** el archivo ZIP `NdxYtConver Winver-x64.zip` 
 2. **Descomprime** el contenido  
 3. **Ejecuta** `NdxYtConver.exe`
@@ -86,51 +95,16 @@ Si deseas hacer descarga de FFmpeg manual desde su sitio oficial:
 Actualmente la versión para Linux se encuentra en desarrollo.  
 Próximamente se ofrecerá una versión compatible con las principales distribuciones.
 
-#  Descargas
-
-### **Última versión estable:**
--  Descarga -> [v1.0.1](https://github.com/jimrobert796/NdxYtConv/releases/tag/v1%2C0%2C1) 
-
-### Historial de Versiones:
-Todos los Releases [Aqui](https://github.com/jimrobert796/NdxYtConv/releases)   
-Corrección de bugs // streams  [v1.0.1](https://github.com/jimrobert796/NdxYtConv/releases/tag/v1%2C0%2C1)  
-Lanzamiento inicial -WinVer [v1.0.0](https://github.com/tu-usuario/tu-repositorio/releases/tag/v1.0.0) 
 
 
 # Uso
 
-### WinVer - Ejecutable .exe 
-
+###  Terminal - Cli
 ```bash
-NdxYtConv - Win-Ver 1.4
-Escribe '--help' para ayuda | Ctrl+C para salir
+ndxYtConv
 ````
 ```bash
-NdxYtConv - Comandos disponibles:
-
-  mp3 <URL>      - Descargar audio como MP3
-  mp4 <URL>      - Descargar video como MP4
-  info <URL>     - Mostrar información del video
-  streams <URL>  - Mostrar streams disponibles
-
-Para ayuda específica:
-  help mp3      - Ayuda sobre descarga MP3
-  help mp4      - Ayuda sobre descarga MP4
-  help info     - Ayuda sobre información
-  help streams  - Ayuda sobre streams
-
-COMANDOS INTERACTIVOS:
-  clear, cls    - Limpiar pantalla
-  salir, exit   - Salir del programa
-  Ctrl+C       - Salir inmediatamente
-```
-
-###  Modo Comando Directo - Cli
-```bash
-EJECUTA -> python .\cli\main.py  
-````
-```bash
-NdxYtConver - bash-ver 1.2
+NdxYtConv - bash-ver 1.2.1
 
 positional arguments:
   {mp3,mp4,info,streams}
@@ -166,14 +140,17 @@ CONSEJOS:
 
 ###  Opciones Avanzadas
 
+#### Descargar sin diálogo "Guardar como"
 ```bash
-# Descargar sin diálogo "Guardar como"
 mp3 <URL> --no-dialog o -n
-
-# Especificar ruta de salida personalizada
+````
+#### Especificar ruta de salida personalizada
+```bash
 mp4 <URL> -o "C:/Videos/mivideo.mp4"
+````
 
-# Usar calidad específica
+#### Usar calidad específica
+```bash
 mp4 <URL> -q 2   # 240p
 mp4 <URL> -q 4   # 480p
 ````
@@ -191,7 +168,12 @@ mp4 <URL> -q 4   # 480p
 | 7 | Máxima | Mejor disponible | Calidad original del video |
 
 ---
-## WebApp UI
+## WebApp UI  
+
+#### Iniciar WebApp
+```bash
+ndxYtConv-web
+````
 
 ###  Características principales
 
@@ -217,10 +199,37 @@ mp4 <URL> -q 4   # 480p
 
 # Instalación del proyecto
 
-### Docker
+### .venv (entorno virtual controlado)
 ```bash
 # 1. Clonar repositorio
-git clone https://github.com/jimrobert796/ndxYtConverter.git
+git clone https://github.com/jimrobert796/ndxYtConv.git
+
+# 2. Crear entorno virtual
+python -m venv .venv
+
+# 3. Activar entorno virtual
+.venv\Scripts\activate
+
+# 4. Actualizar pip
+python -m pip install --upgrade pip
+
+# 5. Instalar dependencias
+pip install -r requirements.txt
+
+# 6. Instalar tu librería en modo desarrollo (opcional)
+pip install -e .
+
+# 7. Ejecutar la aplicación web directamente
+ndxYtConv-web
+
+# 8. Ejecutar la aplicación web directamente
+py main.py   
+```
+
+### Docker 
+```bash
+# 1. Clonar repositorio
+git clone https://github.com/jimrobert796/ndxYtConv.git
 
 # 2. Construir la imagen
 docker build -t nombre-del-proyecto .
@@ -231,13 +240,12 @@ docker run -p 8000:8000 nombre-del-proyecto
 # 4. (Opcional) Ejecutar en background
 docker run -d -p 8000:8000 --name fastapi_ndxytconv ndxytconv
 
-````
+```
 
 ### Docker compose (recomendado)
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/jimrobert796/ndxYtConverter.git
-cd tu-proyecto
+git clone https://github.com/jimrobert796/ndxYtConv.git
 
 # 2. Construir y ejecutar
 docker-compose up -d
@@ -369,14 +377,6 @@ NdxYtConverter/
 │
 ├── build/                      # Builds generados
 │
-├── cli/                        # Interfaces de línea de comandos
-│   |
-│   ├── main.py                 # CLI principal con diálogos "Guardar como"
-│   └── cliWinVer.py            # CLI específica para Windows
-│
-├── core/                       # Núcleo de la aplicación
-│   |
-│   └── downloader.py           # Lógica principal de descarga y metadatos
 │
 │
 ├── dist/                       # Distribución compilada
@@ -384,20 +384,32 @@ NdxYtConverter/
 │
 ├── docs/                       # Util/docs
 │   └── utils.txt
-│
-├── static/                     # Archivos estáticos
-│   ├── css/                    # Hojas de estilo
-│   │   └── styles.css
-│   ├── img/                    # Imágenes
-│   │   ├── icon.ico
-│   └── js/                     # JavaScript
-│       └── index.js
-│
-├── templates/                  # Plantillas HTML
-│   ├── index.html
-│
-├── temp/                       # Directorio temporal
-│   └── (archivos de audio)     # Temporal para conversiones
+
+├── ytconver/                     # Archivos estáticos
+│   ├── cli/                        # Interfaces de línea de comandos
+│   │   |
+│   │   ├── main.py                 # CLI principal con diálogos "Guardar como"
+│   │   └── cliWinVer.py            # CLI específica para Windows
+│   |
+│   ├── core/                       # Núcleo de la aplicación
+│   |   |
+│   |   └── downloader.py           # Lógica principal de descarga y metadatos
+|   | 
+│   ├── web/                       # Archivos relacionados a la build web
+|   |   |
+|   |   ├── static/                     # Archivos estáticos
+|   |   │   ├── css/                    # Hojas de estilo
+|   |   │   │   └── styles.css
+|   |   │   ├── img/                    # Imágenes
+|   |   │   │   ├── icon.ico
+|   |   │   └── js/                     # JavaScript
+|   |   │       └── index.js
+|   |   │
+|   |   └── templates/                  # Plantillas HTML
+|   |       └── index.html
+|   | 
+|   └── temp/                       # Directorio temporal
+│        └── (archivos de audio)     # Temporal para conversiones
 │
 ├── tests/                      # Pruebas unitarias
 │
