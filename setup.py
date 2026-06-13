@@ -40,7 +40,8 @@ setup(
         "requests==2.32.3", 
         "uvicorn==0.40.0",
         "tqdm==4.68.2",
-        "rich==13.9.4"
+        "rich==13.9.4",
+        "rich_argparse==1.8.0"
     ],
     entry_points={
     "console_scripts": [

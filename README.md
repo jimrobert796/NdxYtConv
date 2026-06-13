@@ -4,7 +4,7 @@
 
 #         NdxYtConv - Youtube Converter 
 
-![Version](https://img.shields.io/badge/version-1.3.0-blue)
+![Version](https://img.shields.io/badge/version-1.3.1-blue)
 ![Python](https://img.shields.io/badge/python-3.12+-green)
 ![Platform](https://img.shields.io/badge/platform-windows%20-orange)
 
@@ -42,8 +42,7 @@ Sello: "NexTone Inc."
 
 ###  Interfaces Multiplataforma 
 
-- **CLI avanzada**: Comandos rápidos tipo `ndxyt mp3 <URL>`
-- **Diálogos “Guardar como”**: Nativos para Windows y Linux
+- **CLI**: Comandos rápidos tipo `ndxYtConv mp3 <URL>`
 
 - **Web App**: Pensada para uso Gui/Mobile
 - **Selección de calidad**: 7 niveles de calidad de video
@@ -104,7 +103,9 @@ Próximamente se ofrecerá una versión compatible con las principales distribuc
 ndxYtConv
 ````
 ```bash
-NdxYtConv - ver 1.3.0
+Usage: ndxYtConv.py [-h] {mp3,mp4,info,streams} ...
+
+NdxYtConv - ver 1.3.1
 
 positional arguments:
   {mp3,mp4,info,streams}
@@ -117,42 +118,44 @@ positional arguments:
 options:
   -h, --help            show this help message and exit
 
-EJEMPLOS DE USO:
-  mp3 https://youtu.be/dQw4w9WgXcQ
-  mp4 https://youtu.be/dQw4w9WgXcQ --calidad 5
-  info https://youtu.be/dQw4w9WgXcQ
-  streams https://youtu.be/dQw4w9WgXcQ
-
-CALIDADES MP4:
-  1 = 144p      (baja calidad)
-  2 = 240p      (media-baja)
-  3 = 360p      (estándar)
-  4 = 480p      (DVD calidad)
-  5 = 720p      (HD - recomendado)
-  6 = 1080p     (Full HD)
-  7 = máxima    (mejor calidad disponible)
-
-CONSEJOS:
-  • Usa --no-dialog para descargar directamente sin diálogo
-  • La aplicación te preguntará al final si quieres abrir la ubicación y reproducir el archivo
 ````
 
 
-###  Opciones Avanzadas
+###  Ejemplos de uso
 
-#### Descargar sin diálogo "Guardar como"
+#### Descarga e conversion a .mp3
 ```bash
-mp3 <URL> --no-dialog o -n
-````
+mp3 https://youtu.be/dQw4w9WgXcQ
+```
+
+#### Descarga e conversion a .mp4
+```bash
+mp4 https://youtu.be/dQw4w9WgXcQ
+```
+
+#### Consulta de url
+```bash
+info https://youtu.be/dQw4w9WgXcQ
+```
+
+#### Debug streams
+```bash
+streams https://youtu.be/dQw4w9WgXcQ
+```
+
 #### Especificar ruta de salida personalizada
 ```bash
-mp4 <URL> -o "C:/Videos/mivideo.mp4"
+# .mp4
+mp4 https://youtu.be/dQw4w9WgXcQ -o "C:/Videos/video.mp4"
+
+# .mp3
+mp3 https://youtu.be/dQw4w9WgXcQ -o "C:/Music/music.mp3"
 ````
 
 #### Usar calidad específica
 ```bash
-mp4 <URL> -q 2   # 240p
-mp4 <URL> -q 4   # 480p
+mp4 https://youtu.be/dQw4w9WgXcQ -q 2   # 240p
+mp4 https://youtu.be/dQw4w9WgXcQ -q 5   # 720p
 ````
 
 ##  Calidades Disponibles
@@ -425,12 +428,7 @@ NdxYtConverter/
 
 ##  Estado del proyecto
 Este proyecto se encuentra en **desarrollo activo**.  
-Las funcionalidades y la compatibilidad pueden cambiar en futuras versiones.
-Funcionalidades a tomar en cuenta:
-- Mejorar la version web para compatibilidad Movil
-- Compatibilidad uso en Linux
-- Abarcar mas formatos de conversion
-
+Las funcionalidades y la compatibilidad pueden cambiar en futuras versiones para ajustarse al mantenimiento de las librerias.
 
 
 

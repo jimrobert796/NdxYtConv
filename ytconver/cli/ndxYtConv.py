@@ -9,6 +9,13 @@ import platform
 import tempfile
 import os
 from rich import print  # ¡Reemplaza el print estándar!
+from rich_argparse import RichHelpFormatter
+
+#Colores predeterminados para gusto gracias a rich_argparse
+RichHelpFormatter.styles["argparse.args"] = "Bold cyan"        # opciones --flag
+RichHelpFormatter.styles["argparse.groups"] = "Bold yellow"    # títulos de sección
+RichHelpFormatter.styles["argparse.help"] = "white"       # texto de ayuda
+RichHelpFormatter.styles["argparse.metavar"] = "dim"      # <url>, <ruta>...
 
 # Agregar el directorio core al path
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -25,59 +32,32 @@ class YouTubeDownloaderCLI:
     def run(self):
         """Ejecuta la aplicación CLI"""
         parser = argparse.ArgumentParser(
-            description="NdxYtConver - ver 1.3.0",
-            formatter_class=argparse.RawDescriptionHelpFormatter,
-            epilog="""
- EJEMPLOS DE USO:
-  mp3 https://youtu.be/dQw4w9WgXcQ
-  mp4 https://youtu.be/dQw4w9WgXcQ --calidad 5
-  info https://youtu.be/dQw4w9WgXcQ
-  streams https://youtu.be/dQw4w9WgXcQ
-
-  CALIDADES MP4:
-  1 = 144p      (baja calidad)
-  2 = 240p      (media-baja)
-  3 = 360p      (estándar)
-  4 = 480p      (DVD calidad)
-  5 = 720p      (HD - recomendado)
-  6 = 1080p     (Full HD)
-  7 = máxima    (mejor calidad disponible)
-
- CONSEJOS:
-  • Usa --no-dialog para descargar directamente sin diálogo
-  • La aplicación te preguntará al final si quieres abrir la ubicación y reproducir el archivo
-            """
+            description="NdxYtConver - ver 1.3.1",
+            formatter_class=RichHelpFormatter,
         )
 
         subparsers = parser.add_subparsers(
             dest="command", help="Comando a ejecutar")
 
-        # MP3
-        mp3_parser = subparsers.add_parser("mp3", help="Descargar como MP3")
+        # MP3 parser para ejecucion
+        mp3_parser = subparsers.add_parser("mp3", help="Descargar como MP3", formatter_class=RichHelpFormatter)
+        
         mp3_parser.add_argument("url", help="URL del video de YouTube")
-        mp3_parser.add_argument("--no-dialog", action="store_true",
-                                help="Descargar sin abrir diálogo 'Guardar como'")
-        mp3_parser.add_argument(
-            "--output", "-o", help="Ruta específica para guardar")
+        mp3_parser.add_argument("--output", help="Ruta específica para guardar")
 
         # MP4
-        mp4_parser = subparsers.add_parser("mp4", help="Descargar como MP4")
+        mp4_parser = subparsers.add_parser("mp4", help="Descargar como MP4",  formatter_class=RichHelpFormatter)
+        
         mp4_parser.add_argument("url", help="URL del video de YouTube")
-        mp4_parser.add_argument("--calidad", "-q", type=int, choices=range(1, 8),
-                                default=5, help="Calidad del video (1-7)")
-        mp4_parser.add_argument("--no-dialog", action="store_true",
-                                help="Descargar sin abrir diálogo 'Guardar como'")
-        mp4_parser.add_argument(
-            "--output", "-o", help="Ruta específica para guardar")
+        mp4_parser.add_argument("--calidad", "-q", type=int, choices=range(1, 8),default=5, help="Calidad del video (1-7)")
+        mp4_parser.add_argument("--output", help="Ruta específica para guardar")
 
         # Info
-        info_parser = subparsers.add_parser(
-            "info", help=" Mostrar información del video")
+        info_parser = subparsers.add_parser("info", help=" Mostrar información del video",  formatter_class=RichHelpFormatter)
         info_parser.add_argument("url", help="URL del video de YouTube")
 
         # Streams
-        streams_parser = subparsers.add_parser(
-            "streams", help=" Mostrar streams disponibles")
+        streams_parser = subparsers.add_parser("streams", help=" Mostrar streams disponibles",  formatter_class=RichHelpFormatter)
         streams_parser.add_argument("url", help="URL del video de YouTube")
 
         args = parser.parse_args()
@@ -117,7 +97,7 @@ class YouTubeDownloaderCLI:
     def show_banner(self):
         """Muestra el banner de la aplicación"""
         banner = """
-NdxYtConver - ver 1.3.0"""
+NdxYtConver - ver 1.3.1"""
         print(banner)
 
     def download_mp3(self, url: str, use_dialog: bool = True,
