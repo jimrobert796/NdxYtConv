@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # cli/main.py - VERSIÓN TERMINAL CON GUARDAR COMO
-
 import sys
 import argparse
 import subprocess
@@ -9,178 +8,24 @@ from pathlib import Path
 import platform
 import tempfile
 import os
+from rich import print  # ¡Reemplaza el print estándar!
 
 # Agregar el directorio core al path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 
 from core.downloader import YouTubeDownloaderCore, VideoInfo
-class SaveDialog:
-    """Maneja los diálogos de guardar archivo según el sistema operativo"""
-
-    @staticmethod
-    def get_save_path(default_filename: str, file_extension: str = "") -> Path:
-        """
-        Abre diálogo 'Guardar como' y retorna la ruta seleccionada.
-        Retorna None si el usuario cancela.
-        """
-        sistema = platform.system()
-
-        # Asegurar que la extensión tenga punto
-        if file_extension and not file_extension.startswith("."):
-            file_extension = "." + file_extension
-
-        filename = default_filename + file_extension
-
-        if sistema == "Windows":
-            return SaveDialog._windows_save_dialog(filename)
-        elif sistema == "Darwin":  # macOS
-            return SaveDialog._macos_save_dialog(filename)
-        else:  # Linux
-            return SaveDialog._linux_save_dialog(filename)
-
-    @staticmethod
-    def _windows_save_dialog(filename: str) -> Path:
-        """Diálogo de guardar para Windows"""
-        try:
-            import tkinter as tk
-            from tkinter import filedialog
-
-            # Ocultar ventana principal de tkinter
-            root = tk.Tk()
-            root.withdraw()
-            root.attributes('-topmost', True)
-
-            file_path = filedialog.asksaveasfilename(
-                defaultextension=Path(filename).suffix,
-                initialfile=filename,
-                title="Guardar archivo como",
-                filetypes=[
-                    ("Archivos compatibles", f"*{Path(filename).suffix}"),
-                    ("Todos los archivos", "*.*")
-                ]
-            )
-
-            root.destroy()
-
-            if file_path:
-                return Path(file_path)
-            return None
-
-        except ImportError:
-            print("  Tkinter no disponible. Usando ubicación por defecto.")
-            return SaveDialog._fallback_save_path(filename)
-
-    @staticmethod
-    def _macos_save_dialog(filename: str) -> Path:
-        """Diálogo de guardar para macOS usando AppleScript"""
-        try:
-            # Escapar comillas en el nombre
-            safe_filename = filename.replace('"', '\\"')
-
-            applescript = f'''
-            set theFolder to choose file name with prompt "Guardar como {safe_filename}" default name "{safe_filename}"
-            POSIX path of theFolder
-            '''
-
-            result = subprocess.run(
-                ['osascript', '-e', applescript],
-                capture_output=True,
-                text=True,
-                timeout=30
-            )
-
-            if result.returncode == 0 and result.stdout.strip():
-                return Path(result.stdout.strip())
-            return None
-
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            print("  AppleScript no disponible. Usando ubicación por defecto.")
-            return SaveDialog._fallback_save_path(filename)
-
-    @staticmethod
-    def _linux_save_dialog(filename: str) -> Path:
-        """Diálogo de guardar para Linux usando zenity o kdialog"""
-        # Primero intentar con zenity (Gnome)
-        try:
-            result = subprocess.run(
-                ['zenity', '--file-selection', '--save',
-                '--title', f'Guardar {filename}',
-                '--filename', filename],
-                capture_output=True,
-                text=True,
-                timeout=30
-            )
-
-            if result.returncode == 0 and result.stdout.strip():
-                return Path(result.stdout.strip())
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            pass
-
-        # Si zenity falla, intentar con kdialog (KDE)
-        try:
-            file_filter = f"*.{Path(filename).suffix.lstrip('.')}" if Path(
-                filename).suffix else "*"
-            result = subprocess.run(
-                ['kdialog', '--getsavefilename', filename, file_filter],
-                capture_output=True,
-                text=True,
-                timeout=30
-            )
-
-            if result.returncode == 0 and result.stdout.strip():
-                return Path(result.stdout.strip())
-        except (subprocess.TimeoutExpired, FileNotFoundError):
-            pass
-
-        # Si ambos fallan, usar fallback
-        print("  Zenity/KDialog no disponibles. Usando ubicación por defecto.")
-        return SaveDialog._fallback_save_path(filename)
-
-    @staticmethod
-    def _fallback_save_path(filename: str) -> Path:
-        """Ubicación por defecto cuando no hay diálogo disponible"""
-        downloads_path = Path.home() / "Downloads"
-        downloads_path.mkdir(exist_ok=True)
-
-        # Generar nombre único si ya existe
-        counter = 1
-        base_name = Path(filename).stem
-        extension = Path(filename).suffix
-
-        while (downloads_path / filename).exists():
-            filename = f"{base_name}_{counter}{extension}"
-            counter += 1
-
-        return downloads_path / filename
-
-    @staticmethod
-    def open_file_location(file_path: Path):
-        """Abre la carpeta que contiene el archivo"""
-        sistema = platform.system()
-
-        try:
-            if sistema == "Windows":
-                os.startfile(file_path.parent)
-            elif sistema == "Darwin":  # macOS
-                subprocess.run(['open', str(file_path.parent)])
-            else:  # Linux
-                subprocess.run(['xdg-open', str(file_path.parent)])
-        except Exception as e:
-            print(f"  No se pudo abrir la carpeta: {e}")
-
 
 class YouTubeDownloaderCLI:
     """Interfaz de línea de comandos con diálogo Guardar Como"""
 
     def __init__(self):
         self.core = YouTubeDownloaderCore()
-        self.save_dialog = SaveDialog()
 
     def run(self):
         """Ejecuta la aplicación CLI"""
         parser = argparse.ArgumentParser(
-            description="NdxYtConver - bash-ver 1.2.1",
+            description="NdxYtConver - ver 1.3.0",
             formatter_class=argparse.RawDescriptionHelpFormatter,
             epilog="""
  EJEMPLOS DE USO:
@@ -265,54 +110,41 @@ class YouTubeDownloaderCLI:
         except KeyboardInterrupt:
             print("\n\nOperación cancelada por el usuario")
         except Exception as e:
-            print(f"\n❌ Error: {e}")
+            print(f"\nError: {e}")
         finally:
             self.core.cleanup()
 
     def show_banner(self):
         """Muestra el banner de la aplicación"""
         banner = """
- NdxYtConver - Bash-ver1.2.1               
-        """
+NdxYtConver - ver 1.3.0"""
         print(banner)
 
     def download_mp3(self, url: str, use_dialog: bool = True,
                     output_path: str = None):
         """Descarga MP3 con diálogo opcional"""
         try:
-            print(" OBTENIENDO INFORMACIÓN DEL VIDEO...")
             info = self.core.get_video_info(url)
 
-            print(f"\nVIDEO: {info.title}")
-            print(f"CANAL: {info.author}")
-            print(f"DURACIÓN: {info.length_formatted}")
+            print(f"\n[bold cyan]Titulo:[/bold cyan] {info.title}")
+            print(f"[bold green]Canal:[/bold green] {info.author}")
+            print(f"[bold yellow]Duracion:[/bold yellow] {info.length_formatted}")
 
             # Determinar ruta de guardado
             if output_path:
-                save_path = Path(output_path)
-                print(f"\nGuardando en ruta especificada: {save_path}")
-            elif use_dialog:
-                print(f"\nAbriendo diálogo 'Guardar como'...")
-                default_name = self.core.sanitize_filename(info.title)
-                save_path = self.save_dialog.get_save_path(
-                    default_name, ".mp3")
-
-                if not save_path:
-                    print("El usuario canceló la operación")
-                    return
-
-                print(f"Ruta seleccionada: {save_path}")
+                #save_path = Path(output_path)
+                print(f"\n[bold green]Ruta de destino especificada: [/bold green]{save_path}")
             else:
-                # Sin diálogo, usar ubicación por defecto
-                downloads = Path.home() / "Downloads"
-                downloads.mkdir(exist_ok=True)
+                # En caso no se proporcione una ruta usara la default de donde este el usuario
+                userDir = Path.cwd() # Ubicacion donde se encuentra el usuario
+                userDir.mkdir(exist_ok=True)
                 default_name = self.core.sanitize_filename(info.title) + ".mp3"
-                save_path = downloads / default_name
-                print(f"\nGuardando en: {save_path}")
+                save_path = userDir / default_name
+                print(f"\n[bold green]Ruta de destino: [/bold green]{save_path}")
 
             # Verificar si el archivo ya existe
             if save_path.exists():
-                print(f"\nEl archivo ya existe: {save_path.name}")
+                print(f"\n[bold yellow]El archivo ya existe: [/bold yellow]{save_path.name}")
                 overwrite = input(
                     "¿Deseas sobrescribirlo? (s/n): ").strip().lower()
                 if overwrite != 's':
@@ -326,44 +158,23 @@ class YouTubeDownloaderCLI:
                     print(f"Nuevo nombre: {save_path.name}")
 
             # Descargar
-            print(f"\nDESCARGANDO MP3...")
-            print("   Esto puede tomar unos momentos...")
+            #print(f"\nDESCARGANDO MP3...")
+            #print("   Esto puede tomar unos momentos...")
 
             result = self.core.download_mp3(url, save_path)
 
             # Mostrar resultados
             size_mb = result.stat().st_size / (1024 * 1024)
 
-            print(f"\n{'='*60}")
-            print("¡DESCARGA COMPLETADA!")
-            print(f"{'='*60}")
-            print(f"Archivo: {result.name}")
-            print(f"Tamaño: {size_mb:.2f} MB")
-            print(f"Ubicación: {result.parent}")
-            print(f"{'='*60}")
 
-            print(f"\n¡Listo! Archivo guardado exitosamente.")
+            print(f"[bold cyan]Archivo: [/bold cyan]{result.name}")
+            print(f"[bold yellow]Tamaño: [/bold yellow]{size_mb:.2f} MB")
+            print(f"[bold green]Ubicación: [/bold green]{result.parent}")
 
-            # Preguntar si quiere abrir la ubicación
-            print("\n" + "="*40)
-            abrir_ubicacion = input(
-                "¿Abrir ubicación del archivo? (s/n): ").strip().lower()
-            if abrir_ubicacion == 's':
-                print("\nAbriendo carpeta de destino...")
-                self.save_dialog.open_file_location(result)
-
-            # Preguntar si quiere reproducir
-            print("\n" + "="*40)
-            reproducir = input(
-                "¿Reproducir archivo ahora? (s/n): ").strip().lower()
-            if reproducir == 's':
-                print("\nReproduciendo archivo...")
-                self.play_file(result)
-
-            print("\n¡Proceso finalizado!")
+            print(f"\n[bold green]Archivo guardado exitosamente[/bold green]")
 
         except Exception as e:
-            print(f"\nError durante la descarga: {e}")
+            print(f"\n[bold red]Error durante la descarga: [/bold red]{e}")
             raise
 
     def download_mp4(self, url: str, quality: int = 5, use_dialog: bool = True,
@@ -384,40 +195,29 @@ class YouTubeDownloaderCLI:
 
             resolution, desc = quality_names.get(quality, ("720p", "HD"))
 
-            print(f" OBTENIENDO INFORMACIÓN ({resolution} - {desc})...")
+            print(f"\nSelecionado: ({resolution} - {desc})")
             info = self.core.get_video_info(url)
 
-            print(f"\n VIDEO: {info.title}")
-            print(f" CANAL: {info.author}")
-            print(f" DURACIÓN: {info.length_formatted}")
-            print(f" CALIDAD: {resolution}")
+            print(f"\n[bold cyan]Titulo:[/bold cyan] {info.title}")
+            print(f"[bold green]Canal: [/bold green]{info.author}")
+            print(f"[bold magenta]Duracion: [/bold magenta]{info.length_formatted}")
+            print(f"[bold yellow]Calidad: [/bold yellow]{resolution}")
 
             # Determinar ruta de guardado
             if output_path:
                 save_path = Path(output_path)
-                print(f"\n Guardando en ruta especificada: {save_path}")
-            elif use_dialog:
-                print(f"\n Abriendo diálogo 'Guardar como'...")
-                default_name = f"{self.core.sanitize_filename(info.title)}_{resolution}"
-                save_path = self.save_dialog.get_save_path(
-                    default_name, ".mp4")
-
-                if not save_path:
-                    print("El usuario canceló la operación")
-                    return
-
-                print(f"Ruta seleccionada: {save_path}")
+                print(f"\n[bold greenRuta de destino especificada: [/bold green{save_path}")
             else:
-                # Sin diálogo, usar ubicación por defecto
-                downloads = Path.home() / "Downloads"
-                downloads.mkdir(exist_ok=True)
-                default_name = f"{self.core.sanitize_filename(info.title)}_{resolution}.mp4"
-                save_path = downloads / default_name
-                print(f"\n Guardando en: {save_path}")
+                # En caso no se proporcione una ruta usara la default de donde este el usuario
+                userDir = Path.cwd() # Ubicacion donde se encuentra el usuario
+                userDir.mkdir(exist_ok=True)
+                default_name = self.core.sanitize_filename(info.title) + ".mp4"
+                save_path = userDir / default_name
+                print(f"\n[bold green]Ruta de destino: [/bold green]{save_path}")
 
             # Verificar si el archivo ya existe
             if save_path.exists():
-                print(f"\nEl archivo ya existe: {save_path.name}")
+                print(f"\n[bold yellow]El archivo ya existe: [/bold yellow]{save_path.name}")
                 overwrite = input(
                     "   ¿Deseas sobrescribirlo? (s/n): ").strip().lower()
                 if overwrite != 's':
@@ -430,46 +230,21 @@ class YouTubeDownloaderCLI:
                         counter += 1
                     print(f"Nuevo nombre: {save_path.name}")
 
-            # Descargar
-            print(f"\nDESCARGANDO MP4...")
-            print("   Esto puede tomar varios minutos dependiendo del tamaño...")
-
             result = self.core.download_mp4(url, quality, save_path)
 
             # Mostrar resultados
             size_mb = result.stat().st_size / (1024 * 1024)
 
-            print(f"\n{'='*60}")
-            print("¡DESCARGA COMPLETADA!")
-            print(f"{'='*60}")
-            print(f"    Archivo: {result.name}")
-            print(f"    Tamaño: {size_mb:.2f} MB")
-            print(f"    Resolución: {resolution}")
-            print(f"    Ubicación: {result.parent}")
-            print(f"{'='*60}")
-
-            print(f"\n¡Listo! Video guardado exitosamente.")
-
-            # Preguntar si quiere abrir la ubicación
-            print("\n" + "="*40)
-            abrir_ubicacion = input(
-                "¿Abrir ubicación del archivo? (s/n): ").strip().lower()
-            if abrir_ubicacion == 's':
-                print("\n Abriendo carpeta de destino...")
-                self.save_dialog.open_file_location(result)
-
-            # Preguntar si quiere reproducir
-            print("\n" + "="*40)
-            reproducir = input(
-                "¿Reproducir video ahora? (s/n): ").strip().lower()
-            if reproducir == 's':
-                print("\n Reproduciendo video...")
-                self.play_file(result)
-
-            print("\n¡Proceso finalizado!")
+      
+            print(f"[bold cyan]Archivo: [bold cyan]{result.name}")
+            print(f"[bold yellow]Tamaño: [/bold yellow]{size_mb:.2f} MB")
+            print(f"[bold magenta]Resolucion: [bold magenta]{resolution}")
+            print(f"[bold green]Ubicacion: [/bold green]{result.parent}")
+          
+            print(f"\n[bold green]Video guardado exitosamente[/bold green]")
 
         except Exception as e:
-            print(f"\nError durante la descarga: {e}")
+            print(f"\n[bold red]Error durante la descarga: [/red green]{e}")
             raise
 
     def show_info(self, url: str):
@@ -567,10 +342,9 @@ class YouTubeDownloaderCLI:
             f"{progressive:<6} "
             f"{stream['mime_type']}"
         )
-
-
+"""
     def play_file(self, file_path: Path):
-        """Reproduce un archivo con el reproductor predeterminado"""
+        Reproduce un archivo con el reproductor predeterminado
         sistema = platform.system()
 
         try:
@@ -583,7 +357,7 @@ class YouTubeDownloaderCLI:
             print("     Reproduciendo...")
         except Exception as e:
             print(f"     No se pudo abrir el reproductor: {e}")
-
+"""
 
 def main():
     """Punto de entrada CLI"""

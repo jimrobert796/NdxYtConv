@@ -38,7 +38,9 @@ setup(
         "pyinstaller-hooks-contrib==2026.0", 
         "pytubefix==9.4.1", 
         "requests==2.32.3", 
-        "uvicorn==0.40.0"
+        "uvicorn==0.40.0",
+        "tqdm==4.68.2",
+        "rich==13.9.4"
     ],
     entry_points={
     "console_scripts": [

@@ -6,13 +6,15 @@ import requests
 import subprocess
 import uuid
 import os
-import shutil
+import shutil   
 import re
 from pathlib import Path
 from dataclasses import dataclass
 from typing import Optional, Tuple, Dict, List
 import time
 from datetime import datetime
+from tqdm import tqdm
+from rich import print  # ¡Reemplaza el print estándar!
 
 
 # Dataclase general de la disposicion de informacion de video
@@ -304,7 +306,9 @@ class YouTubeDownloaderCore:
             # Obtener información del video
             video_info = self.get_video_info(url)
             yt = YouTube(url)
-            
+            # Mostrar Callback sobre descarga de audio
+            yt = YouTube(url, on_progress_callback=make_progress_callback("Audio stream"), on_complete_callback=on_complete)
+    
             # Descargar thumbnail
             thumbnail_data = None
             try:
@@ -321,8 +325,8 @@ class YouTubeDownloaderCore:
             temp_audio = self.temp_dir / f"{uuid.uuid4()}.{self._get_audio_extension(audio_stream)}"
             temp_mp3 = self.temp_dir / f"{uuid.uuid4()}.mp3"
             
-            # Descargar audio
-            print(f"Descargando audio: {audio_stream.abr} ({audio_stream.mime_type})")
+            # Descargar audio solo para logs o debuging no es necesario mostrarlo
+            print(f"Audio stream: {audio_stream.abr} ({audio_stream.mime_type})")
             audio_stream.download(output_path=str(self.temp_dir), filename=temp_audio.name)
             
             # Convertir a MP3 con FFmpeg
@@ -333,7 +337,20 @@ class YouTubeDownloaderCore:
                 "-vn", str(temp_mp3)
             ]
             
-            subprocess.run(ffmpeg_cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            
+            process = subprocess.Popen(ffmpeg_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            
+            #ubprocess.run(ffmpeg_cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            
+            # Uso de tqdm para mostrar descarga en tiempo real
+            with tqdm(total=100, unit='%', desc="Convirtiendo", colour="cyan") as pbar:
+                while process.poll() is None:
+                    # No superar el 100%
+                    if pbar.n < 95:  # Dejar espacio para el último update
+                        pbar.update(10)
+                    time.sleep(0.1)
+                # Completar al 100%
+                pbar.update(100 - pbar.n)
             
             # Añadir metadatos ID3
             if preserve_metadata and video_info.extracted_metadata:
@@ -491,6 +508,8 @@ class YouTubeDownloaderCore:
         try:
             video_info = self.get_video_info(url)
             yt = YouTube(url)
+            yt = YouTube(url, on_progress_callback=make_progress_callback("Audio stream"), on_complete_callback=on_complete)
+
             
             # Mapear calidad - CON 240p Y 480p
             quality_map = {
@@ -543,6 +562,9 @@ class YouTubeDownloaderCore:
             if not video_stream:
                 raise Exception(f"No se encontró video en {resolution}")
             
+            # Ahora el callback seria sobre video
+            yt.register_on_progress_callback(make_progress_callback("Video stream"))
+            
             temp_video = self.temp_dir / f"video_{uuid.uuid4()}.mp4"
             video_stream.download(output_path=str(self.temp_dir), filename=temp_video.name)
             
@@ -576,8 +598,21 @@ class YouTubeDownloaderCore:
                     str(temp_combined)
                 ]
                 
-                subprocess.run(ffmpeg_cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 
+                process = subprocess.Popen(
+                    ffmpeg_cmd,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL
+                )
+
+                with tqdm(total=100, unit='%', desc="Convirtiendo", colour="cyan") as pbar:
+                    while process.poll() is None:
+                        if pbar.n < 95:
+                            pbar.update(10)
+                        time.sleep(0.1)
+                    pbar.update(100 - pbar.n)
+                
+
                 # Definir nombre de salida
                 if output_path is None:
                     if video_info.extracted_metadata and video_info.extracted_metadata.song_title:
@@ -785,3 +820,48 @@ class YouTubeDownloaderCore:
 {'='*60}
 """        
         print(warning_msg)
+
+
+
+# Callbacks globales para progreso de descarga
+_pbar = None
+
+def on_progress(stream, chunk, bytes_remaining):
+    """ Callback en progreso para mostrar en terminal """
+    global _pbar
+    if _pbar is None:
+        _pbar = tqdm(
+            total=stream.filesize,
+            unit='B',
+            unit_scale=True,
+            desc="Descargando",
+            colour="blue"
+        )
+    _pbar.n = stream.filesize - bytes_remaining
+    _pbar.refresh()
+
+def on_complete(stream, file_path):
+    """Callback completado para mostrar en terminal """
+    
+    global _pbar
+    if _pbar:
+        _pbar.n = _pbar.total
+        _pbar.refresh()
+        _pbar.close()
+        _pbar = None
+        
+def make_progress_callback(desc: str):
+    """Genera un callback on_progress con descripción personalizada"""
+    def _on_progress(stream, chunk, bytes_remaining):
+        global _pbar
+        if _pbar is None:
+            _pbar = tqdm(
+                total=stream.filesize,
+                unit='B',
+                unit_scale=True,
+                desc=desc,
+                colour="blue"
+            )
+        _pbar.n = stream.filesize - bytes_remaining
+        _pbar.refresh()
+    return _on_progress
