@@ -4,7 +4,7 @@
 
 #         NdxYtConv - Youtube Converter 
 
-![Version](https://img.shields.io/badge/version-1.2.1-blue)
+![Version](https://img.shields.io/badge/version-1.3.0-blue)
 ![Python](https://img.shields.io/badge/python-3.12+-green)
 ![Platform](https://img.shields.io/badge/platform-windows%20-orange)
 
@@ -104,7 +104,7 @@ Próximamente se ofrecerá una versión compatible con las principales distribuc
 ndxYtConv
 ````
 ```bash
-NdxYtConv - bash-ver 1.2.1
+NdxYtConv - ver 1.3.0
 
 positional arguments:
   {mp3,mp4,info,streams}
