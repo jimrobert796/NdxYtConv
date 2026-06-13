@@ -10,3 +10,5 @@ pyinstaller --onefile --console --name "NdxYtConver" --icon "icon.ico" --paths=.
 # Instalarlo como libreria de dependecias (uso para COMANDOS)
 pip install e .
 
+# En caso que te de problemas luego de instalar paquetes 
+pip install -e . --break-system-packages  
