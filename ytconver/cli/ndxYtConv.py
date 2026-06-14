@@ -72,14 +72,12 @@ class YouTubeDownloaderCLI:
             if args.command == "mp3":
                 self.download_mp3(
                     args.url,
-                    not args.no_dialog,
                     args.output
                 )
             elif args.command == "mp4":
                 self.download_mp4(
                     args.url,
                     args.calidad,
-                    not args.no_dialog,
                     args.output
                 )
             elif args.command == "info":
