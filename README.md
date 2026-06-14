@@ -97,7 +97,7 @@ Si deseas hacer descarga de FFmpeg manual desde su sitio oficial:
 
 ***En caso que no te deja ejecutarlo desde terminal:***
 
-Tendras que esportar la ruta para acceder a la libreria
+Tendras que exportar la ruta para acceder a la libreria
 ```bash
 export PATH="$HOME/.local/bin:$PATH"`
 ```
