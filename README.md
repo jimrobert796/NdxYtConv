@@ -6,7 +6,7 @@
 
 ![Version](https://img.shields.io/badge/version-1.3.1-blue)
 ![Python](https://img.shields.io/badge/python-3.12+-green)
-![Platform](https://img.shields.io/badge/platform-windows%20-orange)
+![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux-orange)
 
 **Descarga de videos y música de YouTube con metadatos inteligentes**
 
@@ -89,11 +89,18 @@ Si deseas hacer descarga de FFmpeg manual desde su sitio oficial:
 
 
 ##  Linux
- **Soporte próximamente**  
+***Instalacion general:***
+1.  **Descarga o clona** el respositorio  
+3. **Ejecuta** `pip install e .`
+3. **Terminal** ya puedes usarlo en terminal `ndxYtConv mp3 <Url_cancion>`
+3. **WebApp** Si deseas usar interfaz grafica escriba en la terminal `ndxYtConv-web`
 
-Actualmente la versión para Linux se encuentra en desarrollo.  
-Próximamente se ofrecerá una versión compatible con las principales distribuciones.
+***En caso que no te deja ejecutarlo desde terminal:***
 
+Tendras que esportar la ruta para acceder a la libreria
+```bash
+export PATH="$HOME/.local/bin:$PATH"`
+```
 
 
 # Uso

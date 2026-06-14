@@ -12,3 +12,6 @@ pip install e .
 
 # En caso que te de problemas luego de instalar paquetes 
 pip install -e . --break-system-packages  
+
+#En el caso de instalacion en linux se necesita dar acceso a 
+export PATH="$HOME/.local/bin:$PATH"
