@@ -1,7 +1,7 @@
 from fastapi import HTTPException, FastAPI, Request, BackgroundTasks
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from pathlib import Path
 import uvicorn
 
@@ -81,25 +81,32 @@ def obtener_info_video(urlVideo: str):
 @app.get("/conversion/mp3")
 def convertir_mp3(url: str, background_tasks: BackgroundTasks):
     """
-    ## 🎵 Convertir YouTube a MP3 usando el core
+    ##  Convertir YouTube a MP3 usando el core
     
-    ### 📋 Cómo probar en Swagger:
-    1. 👆 Haz clic en **"Try it out"**
-    2. 📝 Pega una URL de YouTube:
-    3. 🎯 Haz clic en **"Execute"**
-    4. ⬇️ El navegador **descargará automáticamente** el MP3
+    ###  Cómo probar en Swagger:
+    1.  Haz clic en **"Try it out"**
+    2.  Pega una URL de YouTube:
+    3.  Haz clic en **"Execute"**
+    4.  El navegador **descargará automáticamente** el MP3
     """
     try:
         # Usar el core para descargar
         output_path = downloader.download_mp3(url)
         
+        #Encontrar el .mp3 para el response
+        with open(output_path, "rb") as f:
+            contenido = f.read()
+        
         # Agregar tarea para limpiar después
         background_tasks.add_task(borrar_archivo, output_path)
         
-        return FileResponse(
-            output_path,
+        return Response(
+            content=contenido,
             media_type="audio/mpeg",
-            filename=output_path.name
+            headers={
+                "Content-Disposition": f"attachment; filename={output_path.name}",
+                "Cache-Control": "no-store",
+            }
         )
         
     except Exception as e:
@@ -111,12 +118,12 @@ def convertir_mp3(url: str, background_tasks: BackgroundTasks):
 @app.get("/conversion/mp4")
 def convertir_mp4(url: str, calidad: int, background_tasks: BackgroundTasks):
     """
-    ## 🎬 Convertir YouTube a MP4 con Calidad Seleccionable usando el core
+    ##  Convertir YouTube a MP4 con Calidad Seleccionable usando el core
     
-    ### 📋 Cómo probar en Swagger:
-    1. 👆 Haz clic en **"Try it out"**
-    2. 📝 **Pega una URL de YouTube:**
-    3. 🎯 **Selecciona calidad (1-5):**
+    ###  Cómo probar en Swagger:
+    1.  Haz clic en **"Try it out"**
+    2.  **Pega una URL de YouTube:**
+    3.  **Selecciona calidad (1-5):**
        - **1** = 144p (baja calidad)
        - **2** = 240p (media-baja)
        - **3** = 360p (Calidad estándar)
@@ -124,24 +131,31 @@ def convertir_mp4(url: str, calidad: int, background_tasks: BackgroundTasks):
        - **4** = 720p (HD - recomendado)
        - **5** = 1080p (Full HD - Muy buena calidad)
        - **6** = Máxima resolución disponible
-    4. ⚡ Haz clic en **"Execute"**
-    5. ⬇️ **El navegador descargará automáticamente** el MP4
+    4.  Haz clic en **"Execute"**
+    5.  **El navegador descargará automáticamente** el MP4
     """
     try:
         # Validar calidad
-        if calidad not in [1, 2, 3, 4, 5]:
+        if calidad not in [1, 2, 3, 4, 5, 6, 7]:
             raise HTTPException(status_code=400, detail="Calidad inválida. Use 1-5")
         
         # Usar el core para descargar
         output_path = downloader.download_mp4(url, calidad)
         
+        #Encontrar el .mp4 para el response
+        with open(output_path, "rb") as f:
+            contenido = f.read()
+        
         # Agregar tarea para limpiar después
         background_tasks.add_task(borrar_archivo, output_path)
         
-        return FileResponse(
-            output_path,
-            media_type="video/mp4",
-            filename=output_path.name
+        return Response(
+            content=contenido,
+            media_type="audio/mpeg",
+            headers={
+                "Content-Disposition": f"attachment; filename={output_path.name}",
+                "Cache-Control": "no-store",
+            }
         )
         
     except Exception as e:

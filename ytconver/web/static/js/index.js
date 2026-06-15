@@ -97,8 +97,7 @@ $(document).ready(function() {
                 $seccionPrincipal.hide();
                 $seccionInfoVideo.show().addClass('seccion-activa');
                 
-                // 8. Preparar botón de descarga directa
-                prepararDescargaDirecta(url, formatoSeleccionado, calidadSeleccionada);
+                
             })
             .catch(function(error) {
                 console.error('Error:', error);
@@ -204,17 +203,10 @@ $(document).ready(function() {
         $btnDescargarDirecto.html(`<i class="bi bi-download me-2"></i>Descargar ${extension.toUpperCase()}`);
     }
     
-    // Preparar descarga directa
-    function prepararDescargaDirecta(url, formato, calidad) {
-        // Actualizar evento del botón de descarga
-        $btnDescargarDirecto.off('click').on('click', function() {
-            iniciarDescarga(url, formato, calidad);
-        });
-    }
 
 
 
-    async function iniciarDescarga(url, formato, calidad) {
+   async function iniciarDescarga(url, formato, calidad) {
     const encodedUrl = encodeURIComponent(url);
     let downloadUrl;
 
@@ -235,28 +227,31 @@ $(document).ready(function() {
 
         if (!response.ok) {
             throw new Error('La calidad seleccionada no está disponible');
-
-            $seccionInfoVideo.hide();
-            $seccionPrincipal.show();            
         }
 
-        // 👉 Si existe, ahora sí descargar
+        // Obtener nombre real del servidor
+        const disposition = response.headers.get('Content-Disposition');
+        let filename = `descarga.${formato.toLowerCase()}`;
+        if (disposition) {
+            const match = disposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+            if (match) filename = decodeURIComponent(match[1].replace(/['"]/g, ''));
+        }
+
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
         const link = document.createElement('a');
-        link.href = downloadUrl;
+        link.href = blobUrl;
+        link.download = filename;
         link.style.display = 'none';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
 
-        mostrarAlerta(
-                        'Descarga iniciada.<br><small>Por favor espera un momento…</small>',
-                        'success'
-                    );
-
+        mostrarAlerta('Descarga iniciada.<br><small>Por favor espera un momento…</small>', 'success');
 
     } catch (error) {
         mostrarAlerta(error.message, 'danger');
-        // 🔙 Volver a la sección anterior SIN borrar la URL
         $seccionInfoVideo.hide();
         $seccionPrincipal.show();
     } finally {
