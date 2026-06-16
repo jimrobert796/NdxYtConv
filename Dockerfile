@@ -11,7 +11,7 @@ WORKDIR /app
 # Copiar primero requirements para aprovechar cache
 COPY requirements.txt .
 
-# 🔥 Instalar FFmpeg dentro del contenedor
+# Instalar FFmpeg dentro del contenedor
 RUN apt-get update && \
     apt-get install -y --no-install-recommends ffmpeg && \
     rm -rf /var/lib/apt/lists/*
@@ -22,6 +22,9 @@ RUN pip install --upgrade pip && \
 
 # Copiar el resto del proyecto
 COPY . .
+
+# Cambiar al directorio web donde está main.py
+WORKDIR /app/ytconver/web
 
 # Exponer el puerto de FastAPI
 EXPOSE 8000
