@@ -65,7 +65,7 @@ class YouTubeDownloaderCore:
     def get_video_info(self, url: str) -> Optional[VideoInfo]:
         """Obtiene información del video y detecta si es auto-generated"""
         try:
-            yt = YouTube(url, client='WEB_EMBED', use_po_token=True)
+            yt = YouTube()
             
             # Verificar si es auto-generated
             is_auto_generated = self._is_auto_generated(yt)
