@@ -82,7 +82,7 @@ Si deseas hacer descarga de FFmpeg manual desde su sitio oficial:
 3. **WebApp** Si deseas usar interfaz grafica escriba en la terminal `ndxYtConv-web`
 
 
-***Ejecutable compilado:***
+***Ejecutable compilado ( Outdated / Atrasado):***
 1.  **Descarga** el archivo ZIP `NdxYtConver Winver-x64.zip` 
 2. **Descomprime** el contenido  
 3. **Ejecuta** `NdxYtConver.exe`
