@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setup(
     name="ndxYtConv",
-    version="1.2.1",
+    version="1.2.2",
     author="jimrobert796",
     author_email="",
     description="Herramienta ligera para convertir YouTube a mp3/mp4",
@@ -36,7 +36,7 @@ setup(
         "mutagen==1.47.0", 
         "pyinstaller==6.18.0", 
         "pyinstaller-hooks-contrib==2026.0", 
-        "pytubefix==9.4.1", 
+        "pytubefix==11.2.2", 
         "requests==2.32.3", 
         "uvicorn==0.40.0",
         "tqdm==4.68.2",

@@ -32,7 +32,7 @@ class YouTubeDownloaderCLI:
     def run(self):
         """Ejecuta la aplicación CLI"""
         parser = argparse.ArgumentParser(
-            description="NdxYtConver - ver 1.3.1",
+            description="NdxYtConver - ver 1.3.2",
             formatter_class=RichHelpFormatter,
         )
 
@@ -95,7 +95,7 @@ class YouTubeDownloaderCLI:
     def show_banner(self):
         """Muestra el banner de la aplicación"""
         banner = """
-NdxYtConver - ver 1.3.1"""
+NdxYtConver - ver 1.3.2"""
         print(banner)
 
     def download_mp3(self, url: str, use_dialog: bool = True,

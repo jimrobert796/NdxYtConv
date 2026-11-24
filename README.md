@@ -4,7 +4,7 @@
 
 #         NdxYtConv - Youtube Converter 
 
-![Version](https://img.shields.io/badge/version-1.3.1-blue)
+![Version](https://img.shields.io/badge/version-1.3.2-blue)
 ![Python](https://img.shields.io/badge/python-3.12+-green)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux-orange)
 
@@ -54,54 +54,140 @@ Sello: "NexTone Inc."
 - **Manejo de errores robusto** con reintentos automáticos
 
 
+
 # Instalación
 
-### Instalar FFmpeg REQUERIDO! para su uso!
+## 1. Requisito: FFmpeg (obligatorio)
 
-**¿Que es FFmpeg?**  
-FFmpeg es una suite completa, gratuita y open-source para manipular audio y video. Es como un "Photoshop" para archivos multimedia, pero en la línea de comandos.  
-Este proyecto hace uso de esta herramienta externa, por lo que se pide su instalacion por mejor comodidad y uso.
+FFmpeg es una herramienta externa que usa el proyecto para convertir audio y video. Sin ella, las conversiones fallan.
 
 | Sistema | Comando |
 |--------|--------|
-| **Windows** | `winget install ffmpeg` <br> |
+| **Windows** | `winget install Gyan.FFmpeg` |
 | **Linux (Debian/Ubuntu)** | `sudo apt install ffmpeg` |
 
-Si deseas hacer descarga de FFmpeg manual desde su sitio oficial:  
-    https://ffmpeg.org/download.html
+Cierra y abre la terminal después de instalarlo y comprueba que funciona con `ffmpeg -version`.
+Descarga manual: https://ffmpeg.org/download.html
 
+## 2. Instalar la aplicación (recomendado: pipx)
 
-##  Windows
+[pipx](https://pipx.pypa.io) instala el programa en su propio entorno aislado y deja los comandos disponibles desde cualquier terminal, sin activar nada. En Linux moderno también evita el error `externally-managed-environment` de pip.
 
-**Pasos de instalación**
+### Windows
 
-***Instalacion general:***
-1.  **Descarga o clona** el respositorio  
-3. **Ejecuta** `pip install e .`
-3. **Terminal** ya puedes usarlo en terminal `ndxYtConv mp3 <Url_cancion>`
-3. **WebApp** Si deseas usar interfaz grafica escriba en la terminal `ndxYtConv-web`
+```powershell
+# 1. Instalar pipx (una sola vez, fuera de cualquier venv)
+python -m pip install --user pipx
+python -m pipx ensurepath
 
+# 2. Cerrar y abrir la terminal
 
-***Ejecutable compilado:***
-1.  **Descarga** el archivo ZIP `NdxYtConver Winver-x64.zip` 
-2. **Descomprime** el contenido  
-3. **Ejecuta** `NdxYtConver.exe`
-
-
-##  Linux
-***Instalacion general:***
-1.  **Descarga o clona** el respositorio  
-3. **Ejecuta** `pip install e .`
-3. **Terminal** ya puedes usarlo en terminal `ndxYtConv mp3 <Url_cancion>`
-3. **WebApp** Si deseas usar interfaz grafica escriba en la terminal `ndxYtConv-web`
-
-***En caso que no te deja ejecutarlo desde terminal:***
-
-Tendras que exportar la ruta para acceder a la libreria
-```bash
-export PATH="$HOME/.local/bin:$PATH"`
+# 3. Clonar e instalar
+git clone https://github.com/jimrobert796/NdxYtConv.git
+cd NdxYtConv
+pipx install .
 ```
 
+### Linux (Debian/Ubuntu)
+
+```bash
+# 1. Instalar pipx (una sola vez)
+sudo apt install pipx
+pipx ensurepath
+
+# 2. Cerrar y abrir la terminal
+
+# 3. Clonar e instalar
+git clone https://github.com/jimrobert796/NdxYtConv.git
+cd NdxYtConv
+pipx install .
+```
+
+### Comprobar la instalación
+
+```bash
+ndxytconv --help
+```
+
+> Los comandos van en **minúsculas**: `ndxytconv` y `ndxytconv-web`. En Linux distinguen mayúsculas.
+
+### Actualizar, reinstalar y desinstalar
+
+```bash
+pipx upgrade ndxYtConv        # actualizar dependencias (útil si YouTube cambia algo)
+pipx install . --force        # reinstalar tras cambiar el código o el setup.py
+pipx uninstall ndxYtConv      # desinstalar
+```
+
+Para desarrollo, instala con `pipx install -e .` (modo editable) y tus cambios se reflejan sin reinstalar.
+
+### Ejecutable compilado (Windows)
+
+1. Descarga el archivo ZIP `NdxYtConver Winver-x64.zip`
+2. Descomprime el contenido
+3. Ejecuta `NdxYtConver.exe`
+
+## Solución de problemas
+
+| Problema | Solución |
+|---------|----------|
+| `pipx` o `ndxytconv` no se reconoce | Cierra y abre la terminal. Si sigue, ejecuta `python -m pipx ensurepath` y ábrela de nuevo |
+| Linux: el comando no se encuentra | `export PATH="$HOME/.local/bin:$PATH"` (agrégalo a tu `~/.bashrc`) |
+| Linux: `externally-managed-environment` | No uses `pip install` global; usa pipx o un venv |
+| `ffmpeg` no encontrado | Instálalo (paso 1) y reabre la terminal |
+| Error "detected as a bot" de YouTube | Actualiza: `pipx upgrade ndxYtConv` |
+| PowerShell no deja activar el venv | `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` |
+
+---
+
+# Instalación para desarrollo
+
+### Con entorno virtual (.venv)
+
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/jimrobert796/NdxYtConv.git
+cd NdxYtConv
+
+# 2. Crear el entorno virtual
+python -m venv .venv
+
+# 3. Activarlo
+.venv\Scripts\activate          # Windows
+source .venv/bin/activate       # Linux
+
+# 4. Actualizar pip e instalar en modo editable
+python -m pip install --upgrade pip
+pip install -e .
+
+# 5. Ejecutar (con el venv activado)
+ndxytconv-web
+```
+
+Las herramientas de empaquetado (PyInstaller) se instalan aparte: `pip install -r requirements.txt`.
+
+### Docker
+
+```bash
+git clone https://github.com/jimrobert796/NdxYtConv.git
+cd NdxYtConv
+
+docker build -t ndxytconv .
+docker run -d -p 8000:8000 --name fastapi_ndxytconv ndxytconv
+```
+
+### Docker Compose (recomendado)
+
+```bash
+git clone https://github.com/jimrobert796/NdxYtConv.git
+cd NdxYtConv
+
+docker compose up -d --build   # construir y ejecutar
+docker compose logs -f         # ver logs
+docker compose down            # detener
+```
+
+FFmpeg se instala automáticamente dentro de la imagen. La web queda en http://localhost:8000.
 
 # Uso
 
@@ -206,69 +292,6 @@ ndxYtConv-web
 
 ---
 
-
-# Instalación del proyecto
-
-### .venv (entorno virtual controlado)
-```bash
-# 1. Clonar repositorio
-git clone https://github.com/jimrobert796/ndxYtConv.git
-
-# 2. Crear entorno virtual
-python -m venv .venv
-
-# 3. Activar entorno virtual
-.venv\Scripts\activate
-
-# 4. Actualizar pip
-python -m pip install --upgrade pip
-
-# 5. Instalar dependencias
-pip install -r requirements.txt
-
-# 6. Instalar tu librería en modo desarrollo (opcional)
-pip install -e .
-
-# 7. Ejecutar la aplicación web directamente
-ndxYtConv-web
-
-# 8. Ejecutar la aplicación web directamente
-py main.py   
-```
-
-### Docker 
-```bash
-# 1. Clonar repositorio
-git clone https://github.com/jimrobert796/ndxYtConv.git
-
-# 2. Construir la imagen
-docker build -t nombre-del-proyecto .
-
-# 3. Ejecutar el contenedor
-docker run -p 8000:8000 nombre-del-proyecto
-
-# 4. (Opcional) Ejecutar en background
-docker run -d -p 8000:8000 --name fastapi_ndxytconv ndxytconv
-
-```
-
-### Docker compose (recomendado)
-```bash
-# 1. Clonar el repositorio
-git clone https://github.com/jimrobert796/ndxYtConv.git
-
-# 2. Construir y ejecutar
-docker-compose up -d
-
-# 3. Ver logs
-docker-compose logs -f
-
-# 4. Detener
-docker-compose down
-```
-
-Al momento de crear la imagen, FFmpeg se instala en el contenedor automaticamente.
-
 # Dependencias del proyecto
 
 A continuación se describen las dependencias utilizadas en **NdxYtConver** y su propósito dentro del proyecto.
@@ -294,7 +317,7 @@ A continuación se describen las dependencias utilizadas en **NdxYtConver** y su
 
 ###  Descarga & Procesamiento Multimedia
 
-- **pytubefix (9.4.1)**  
+- **pytubefix (11.2.2)**  
   Descarga de audio y video desde YouTube.
 
 - **mutagen (1.47.0)**  

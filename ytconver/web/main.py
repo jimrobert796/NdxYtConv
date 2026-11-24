@@ -35,7 +35,9 @@ downloader = YouTubeDownloaderCore()
 
 # Correr la app via terminal o si gustan usarla en otro lugar
 def main():
-    uvicorn.run("web.main:app", port=8000)
+    uvicorn.run("web.main:app")
+    
+    
 # Función para limpieza en background
 def borrar_archivo(path: Path):
     """Elimina archivo de forma segura"""
