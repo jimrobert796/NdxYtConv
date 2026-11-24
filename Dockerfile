@@ -17,4 +17,4 @@ COPY . .
 
 EXPOSE 5000
 
-CMD ["sh", "-c", "cd /app/ytconver/web && uvicorn main:app --host 0.0.0.0 --port 8000"]
+CMD ["sh", "-c", "cd /app/ytconver/web && uvicorn main:app --host 0.0.0.0 --port 5000"]
